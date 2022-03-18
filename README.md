@@ -8,8 +8,40 @@ A) A **conceptual design of your solution** and **implementation plan** as a gro
 - Please submit your conceptual designs to Canvas via dedicated link.
 - Only one submission per group is required.
 
+> • All tasks/ISRs in your design and their functionality 
+> • All communication/synchronization paths and what message is sent  
+> • The conditions in which each task/ISR execute
+> • A3 size.
+
 ### Week 7, Monday (11th April 2022, 11:00 am)
 B) A **description and discussion of your project** and the **resulting solution in a joint documentation file**. That should include **final design diagram**, which may be based on your conceptual design delivered in Week 5.
+
+### Final Documentation
+Instructions for running your assignment on a DE2-115 board  
+
+A description of your entire solution  
+- All the tasks, what they do  
+- Which tasks are periodic? Non-periodic? Why?  
+- A final diagram of your design (highlighting any changes from your initial paper design) 
+
+Justification of your design decisions  
+
+- Why did you split functionality a certain way?  
+- Why did you choose a specific mechanism for protecting shared variables?  
+- Why did you choose a specific communication mechanism?  
+- Why do your tasks have the priorities you’ve assigned?  
+- Any issues with the application design  
+
+Evidence that you're engaging with FreeRTOS  
+
+- What features of FreeRTOS did you use
+- How do your tasks interact?  
+- What are potential problems with multitasking that you've overcome or prevented?  
+- Limitations/issues in your design  
+
+An additional page indicating the way in which you partitioned work on the assignment, and the time taken for each part
+
+*!!! Assignment infomation is part of exam !!!*
 
 C) Assignment **source code** submitted in electronic form via Canvas.
 
