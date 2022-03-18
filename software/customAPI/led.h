@@ -5,8 +5,8 @@
  *      Author: Hao Lin
  */
 
-#ifndef LEDS_H_
-#define LEDS_H_
+#ifndef LED_H_
+#define LED_H_
 
 #include "project.h"
 

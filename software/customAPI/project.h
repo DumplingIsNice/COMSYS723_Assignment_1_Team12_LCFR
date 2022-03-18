@@ -16,12 +16,16 @@
 // String Functions
 #include <string.h>
 
+
 // CPU Generated Symbolic Names
 #include <system.h>
 // Interrupt library
 #include <sys/alt_irq.h>
 // PIO register writing and reading operation
 #include <altera_avalon_pio_regs.h>
+// Altera system defined types
+#include <alt_types.h>
+
 
 // Delay functions
 // #include <unistd.h>
@@ -38,6 +42,7 @@
 // Custom API Libraries
 #include "led.h"
 #include "switch.h"
+#include "buttons.h"
 
 // Common macros
 #define HIGH 	1
