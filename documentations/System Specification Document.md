@@ -41,7 +41,7 @@ Concurrent tasks - multitasked with a RT-OS (FreeOS)
 
 1) Voltage read.
 2) Frequency analyser determines period of signal (T)
-3) $\micro$P converts freq to period
+3) uP converts freq to period
 
 ### Signal Monitor
 **Inputs:**
@@ -101,7 +101,7 @@ Displays stored frequency infomation through VGA display
 **Load Management Function:**
 [[#Load Shedding Service]]
 
-When all load is connected (apart from intial entry, before load shredding), return to  stable state
+When all load is connected (apart from intial entry, before load shredding), return to  stable state.
 
 #### Stable
 - Boot/default normal operation.
@@ -140,19 +140,19 @@ When all load is connected (apart from intial entry, before load shredding), ret
 Global infomation on the state of system.
 
 ---
-## Requirements
+## Detailed Requirements
 ### ISR (minmum 2)
 2x ISR from each timer (response & validation window)
-- Is the IP block stored in the memory or the outputs in the memory?
-- What happens when all load is shred?
-- Measure system-uptime from boot using some system timer? Need timer?
+
+**Measurement ISR**
+- ISR register counting semaphore? The handled by calculation_handler?
 
 ## Timer Services (from FreeRTOS)
 
 ### Shared Variables
 Needs to be mutually excluded (mutex protection).
 
-Memory for $2 \times 5=10$ frequency & ROC value
+Memory for 2x5=10 frequency & ROC value
 - Single-precision Float?
 - Queued? FIFO Array?
 
