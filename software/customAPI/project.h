@@ -36,6 +36,8 @@
 //#include "freertos/semphr.h"
 
 // Custom API Libraries
+#include "led.h"
+#include "switch.h"
 
 // Common macros
 #define HIGH 	1
