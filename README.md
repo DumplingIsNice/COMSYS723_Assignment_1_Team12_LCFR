@@ -8,10 +8,10 @@ A) A **conceptual design of your solution** and **implementation plan** as a gro
 - Please submit your conceptual designs to Canvas via dedicated link.
 - Only one submission per group is required.
 
-> • All tasks/ISRs in your design and their functionality 
-> • All communication/synchronization paths and what message is sent  
-> • The conditions in which each task/ISR execute
-> • A3 size.
+• All tasks/ISRs in your design and their functionality 
+• All communication/synchronization paths and what message is sent  
+• The conditions in which each task/ISR execute
+• A3 size.
 
 ### Week 7, Monday (11th April 2022, 11:00 am)
 B) A **description and discussion of your project** and the **resulting solution in a joint documentation file**. That should include **final design diagram**, which may be based on your conceptual design delivered in Week 5.
