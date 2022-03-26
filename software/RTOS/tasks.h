@@ -17,9 +17,8 @@
 #define HANDLE_KEYBOARD_PRIORITY 14
 
 // Definition of Periods
-#define HANDLE_KEYBOARD_DELAY 50
 
-// Used to delete a task
+// Task handles used to delete a task
 TaskHandle_t xHandle;
 
 // Global variables

@@ -8,13 +8,6 @@
 #ifndef RTOS_HANDLE_KEYBOARD_H_
 #define RTOS_HANDLE_KEYBOARD_H_
 
-/*
- * handle_keyboard.c
- *
- *  Created on: 25 Mar 2022
- *      Author: Hao Lin
- */
-
 #include "..\customAPI\project.h"
 
 // Definitions for handle_keyboard

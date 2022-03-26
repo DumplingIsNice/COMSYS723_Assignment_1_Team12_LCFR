@@ -5,7 +5,7 @@
  *      Author: Hao Lin
  */
 
-#include "../RTOS/handle_keyboard.h"
+#include "handle_keyboard.h"
 
 // Under one of the established commanded modes (defined in handle_keyboard.h)
 // A threshold value is expected.
@@ -64,7 +64,7 @@ uint handle_threshold_string_input(const char *string, char threshold_type)
  * expecting the value of threshold as input:
  *
  * - If valid: threshold is set
- * - If invalid: restes keyboard handling to default mode
+ * - If invalid: resets keyboard handling to default mode
 */
 void handle_keyboard()
 {
@@ -76,7 +76,9 @@ void handle_keyboard()
 
 	while(TRUE)
 	{
+		printf("Keyboard running\n");
 		status = xSemaphoreTake(ps2_keyboard_sem, portMAX_DELAY);
+		printf("Semaphore taken\n");
 		if (status == pdPASS)
 		{
 			xQueueReceive(ps2_keyboard_inbox, received_string, portMAX_DELAY);
@@ -132,7 +134,6 @@ void handle_keyboard()
 			printf("FAILED TO HANDLE!!!");
 		}
 		status = FALSE;
-		vTaskDelay(HANDLE_KEYBOARD_DELAY);
 	}
 }
 
@@ -169,6 +170,11 @@ uint is_numbers_only(const char *string)
 
 // Decodes keypad input
 void decode_KP()
+{
+	;
+}
+
+void print_to_LCD()
 {
 	;
 }
