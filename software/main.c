@@ -32,6 +32,7 @@
 int main()
 {
 	ps2_keyboard_init();
+	init_freq_analyser();
 
 	init_OS_data_structs();
 	init_create_tasks();

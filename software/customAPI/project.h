@@ -56,6 +56,7 @@
 
 #include "../RTOS/tasks.h"
 #include "../RTOS/handle_keyboard.h"
+#include "../RTOS/calc_freq_ROC.h"
 
 // Common macros
 #define HIGH 	1
