@@ -14,7 +14,8 @@
 #define TASK_STACKSIZE       2048
 
 // Definition of Task Priorities
-#define HANDLE_KEYBOARD_PRIORITY 14
+#define CALC_FREQ_ROC_PRIORITY 		configMAX_PRIORITIES - 1
+#define HANDLE_KEYBOARD_PRIORITY 	configMAX_PRIORITIES - 2
 
 // Definition of Periods
 

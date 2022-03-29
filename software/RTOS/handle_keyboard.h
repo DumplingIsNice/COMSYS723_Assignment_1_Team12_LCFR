@@ -18,11 +18,13 @@
 #define FREQ_STRING		"FREQ"
 #define RATE_STRING		"RATE"
 
+// Definition of Message Queues
+#define PS2_KEYBOARD_QUEUE_SIZE  30
+
 // Definition of Semaphores
 SemaphoreHandle_t ps2_keyboard_sem;
 
-// Definition of Message Queues
-#define PS2_KEYBOARD_QUEUE_SIZE  30
+// QueueHandles
 QueueHandle_t ps2_keyboard_inbox;
 
 // Under one of the established commanded modes (defined in handle_keyboard.h)

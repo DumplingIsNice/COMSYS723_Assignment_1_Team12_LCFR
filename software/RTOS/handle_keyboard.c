@@ -20,20 +20,21 @@
 uint handle_threshold_string_input(const char *string, char threshold_type)
 {
 	uint status = 0;
-	if (is_numbers_only(string))
+	char* pEnd;
+	double threshold = strtod(string, &pEnd);
+	printf("Threshold: %f\n", threshold);
+	if (threshold)
 		{
-			uint threshold = atoi(string);
-
 			switch(threshold_type)
 			{
 			case FREQ_COMMAND:
 				// Mutex, perform threshold setting
-				printf("Freq Threshold: %d\n", threshold);
+				printf("Freq Threshold: %f\n", threshold);
 				status = 1;
 				break;
 			case RATE_COMMAND:
 				// Mutex, perform threshold setting
-				printf("Rate Threshold: %d\n", threshold);
+				printf("Rate Threshold: %f\n", threshold);
 				status = 1;
 				break;
 			default:
@@ -84,13 +85,6 @@ void handle_keyboard()
 			xQueueReceive(ps2_keyboard_inbox, received_string, portMAX_DELAY);
 			printf("Received %s\n", received_string);
 			printf("Handling\n");
-
-			// Protects from unnecessary long input
-			// And prevents task from overflowing allocated stack
-			if (strlen(logged_string) > 5)
-			{
-				strcpy(logged_string, "");
-			}
 
 			// When enter is pressed:
 				// if string is one of the recognised commands:
