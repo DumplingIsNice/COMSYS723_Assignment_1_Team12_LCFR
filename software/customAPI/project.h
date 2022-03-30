@@ -47,6 +47,7 @@
 #include "switch.h"
 #include "buttons.h"
 #include "keyboard.h"
+#include "timer_h.h"
 
 // Scheduler includes
 #include "../freertos/FreeRTOS.h"

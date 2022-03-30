@@ -31,6 +31,7 @@
 
 int main()
 {
+	response_timer_init();
 	ps2_keyboard_init();
 	init_freq_analyser();
 

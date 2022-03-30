@@ -69,7 +69,14 @@ void calc_freq_ROC()
 
         printf("Report:\n");
         printf("new_freq_value: %f\nfreq_ROC_value: %f\n", new_freq_value, freq_ROC_value);
-        printf("#########################\n");
+
         flag_first_run = TRUE;
+
+        response_timer_start();
+        vTaskDelay(3000);
+        response_timer_end();
+        printf("Task is delayed: %u ms\n", calc_response_time());
+
+        printf("#########################\n");
 	}
 }
