@@ -15,10 +15,16 @@
 /* Graphing Parameters */
 
 #define MIN_FREQ 45
-#define FREQPLT_ORI_X 101		//x axis pixel position at the plot origin
-#define FREQPLT_GRID_SIZE_X 5	//pixel separation in the x axis between two data points
-#define FREQPLT_ORI_Y 359.0		//y axis pixel position at the plot origin
-#define FREQPLT_FREQ_RES 20.0	//number of pixels per Hz (y axis scale)
+
+#define FREQPLT_ORI_X 		101		//x axis pixel position at the plot origin
+#define FREQPLT_GRID_SIZE_X 5		//pixel separation in the x axis between two data points
+#define FREQPLT_ORI_Y 		359.0	//y axis pixel position at the plot origin
+#define FREQPLT_FREQ_RES 	20.0	//number of pixels per Hz (y axis scale)
+
+#define ROCPLT_ORI_X 		101
+#define ROCPLT_GRID_SIZE_X 	5
+#define ROCPLT_ORI_Y 		420 	//Center of plot (0 at center) instead of left bottom
+#define ROCPLT_ROC_RES 		0.5		//number of pixels per Hz/s (y axis scale)
 
 typedef struct{
 	unsigned int x1;
@@ -35,7 +41,7 @@ typedef struct{
 
 #define RESPONSE_TIME_BUF_SIZE		FREQ_RESPONSE_QUEUE_SIZE
 #define FREQ_DATA_BUF_SIZE			100
-#define ROC_DATA_BUF_SIZE			5
+#define ROC_DATA_BUF_SIZE			100
 
 // Mux Identifiers
 #define EMPTY_RESPONSE 	'P'

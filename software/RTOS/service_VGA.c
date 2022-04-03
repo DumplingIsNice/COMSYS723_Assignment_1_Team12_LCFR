@@ -40,6 +40,8 @@ void service_VGA()
 	double roc_vals[ROC_DATA_BUF_SIZE] = {0};
 	uint n = 99; // Iterator
 	uint* n_p = &n;
+	uint m = 99; // Iterator
+	uint* m_p = &m;
 
 	double threshold_freq = 12.2;
 	double threshold_roc = 12.3;
@@ -66,26 +68,38 @@ void service_VGA()
 		// Empties Freq data queue
 		if (uxQueueMessagesWaiting(Q_freq_calc_values) != 0)
 		{
-			//printf("!!!!!!!!!!!!Waiting freq_queue_sem!!!!!!!!!!!!\n");
+//			printf("!!!!!!!!!!!!Waiting freq_queue_sem!!!!!!!!!!!!\n");
 			if (xSemaphoreTake(freq_queue_sem, portMAX_DELAY) == pdTRUE)
 			{
-				//printf("!!!!!!!!!!!!Emptying FREQ Queue!!!!!!!!!!!!\n");
+//				printf("!!!!!!!!!!!!Emptying FREQ Queue!!!!!!!!!!!!\n");
 				empty_queue(EMPTY_FREQ, freq_vals, n_p);
 				xSemaphoreGive(freq_queue_sem);
-				//printf("!!!!!!!!!!!!Finished Emptying freq_queue_sem!!!!!!!!!!!!\n");
-				vTaskDelay(15);
+//				printf("!!!!!!!!!!!!Finished Emptying freq_queue_sem!!!!!!!!!!!!\n");
 			} else {
 				printf("freq_queue_sem Semaphore cannot be taken!\n");
 			}
 		}
 
 		// Empties RoC data queue
+		if (uxQueueMessagesWaiting(Q_roc_calc_values) != 0)
+		{
+//			printf("!!!!!!!!!!!!Waiting roc_queue_sem!!!!!!!!!!!!\n");
+			if (xSemaphoreTake(roc_queue_sem, portMAX_DELAY) == pdTRUE)
+			{
+//				printf("!!!!!!!!!!!!Emptying ROC Queue!!!!!!!!!!!!\n");
+				empty_queue(EMPTY_ROC, roc_vals, m_p);
+				xSemaphoreGive(roc_queue_sem);
+//				printf("!!!!!!!!!!!!Finished Emptying roc_queue_sem!!!!!!!!!!!!\n");
+			} else {
+				printf("roc_queue_sem Semaphore cannot be taken!\n");
+			}
+		}
 
 		/* Draws Graph */
 
 		// Clear old graph
 		alt_up_pixel_buffer_dma_draw_box(pixel_buf, 101, 210, 600, 360, 0, 0);
-//		alt_up_pixel_buffer_dma_draw_box(pixel_buf, 101, 380, 600, 460, 0, 0);
+		alt_up_pixel_buffer_dma_draw_box(pixel_buf, 101, 380, 600, 460, 0, 0);
 
 		// Freq
 		alt_up_pixel_buffer_dma_draw_hline(pixel_buf, 100, 590, 360, ((0x3ff << 20) + (0x3ff << 10) + (0x3ff)), 0);
@@ -95,19 +109,26 @@ void service_VGA()
 		alt_up_pixel_buffer_dma_draw_hline(pixel_buf, 100, 590, 460, ((0x3ff << 20) + (0x3ff << 10) + (0x3ff)), 0);
 		alt_up_pixel_buffer_dma_draw_vline(pixel_buf, 100, 380, 460, ((0x3ff << 20) + (0x3ff << 10) + (0x3ff)), 0);
 
-		alt_up_char_buffer_string(char_buf, "Freq(Hz)", 0, 26);
+		alt_up_char_buffer_string(char_buf, "Freq(Hz)", 0, 36);
 		i = 22;
 		alt_up_char_buffer_string(char_buf, "52", 10, i+=5);
 		alt_up_char_buffer_string(char_buf, "50", 10, i+=5);
 		alt_up_char_buffer_string(char_buf, "48", 10, i+=5);
 		alt_up_char_buffer_string(char_buf, "46", 10, i+=5);
 
-		alt_up_char_buffer_string(char_buf, "df/dt", 0, 46);
-		alt_up_char_buffer_string(char_buf, "(Hz/s)", 0, 47);
-		alt_up_char_buffer_string(char_buf, "(Abs)", 0, 48);
+		alt_up_char_buffer_string(char_buf, "df/dt", 0, 51);
+		alt_up_char_buffer_string(char_buf, "(Hz/s)", 0, 52);
+		alt_up_char_buffer_string(char_buf, "(Abs)", 0, 53);
+		i = 46;
+		alt_up_char_buffer_string(char_buf, "60", 10, i+=2);
+		alt_up_char_buffer_string(char_buf, "30", 10, i+=2);
+		alt_up_char_buffer_string(char_buf, "0", 10, i+=2);
+		alt_up_char_buffer_string(char_buf, "-30", 9, i+=2);
+		alt_up_char_buffer_string(char_buf, "-60", 9, i+=2);
 
 		for(uint k=0;k<99;++k){ //i here points to the oldest data, j loops through all the data to be drawn on VGA
-			if (((int)(freq_vals[(n+k)%100]) > MIN_FREQ) && ((int)(freq_vals[(n+k+1)%100]) > MIN_FREQ)){
+			if (((int)(freq_vals[(n+k)%100]) > MIN_FREQ) && ((int)(freq_vals[(n+k+1)%100]) > MIN_FREQ))
+			{
 				//Calculate coordinates of the two data points to draw a line in between
 				//Frequency plot
 				line_freq.x1 = FREQPLT_ORI_X + FREQPLT_GRID_SIZE_X * k;
@@ -117,13 +138,13 @@ void service_VGA()
 				line_freq.y2 = (int)(FREQPLT_ORI_Y - FREQPLT_FREQ_RES * (freq_vals[(n+k+1)%100] - MIN_FREQ));
 
 				//Frequency RoC plot
-//				line_ROC.x1 = ROCPLT_ORI_X + ROCPLT_GRID_SIZE_X * k;
-//				line_ROC.y1 = (int)(ROCPLT_ORI_Y - ROCPLT_ROC_RES * dfreq[(i+j)%100]);
-//
-//				line_ROC.x2 = ROCPLT_ORI_X + ROCPLT_GRID_SIZE_X * (k + 1);
-//				line_ROC.y2 = (int)(ROCPLT_ORI_Y - ROCPLT_ROC_RES * dfreq[(i+j+1)%100]);
+				line_ROC.x1 = ROCPLT_ORI_X + ROCPLT_GRID_SIZE_X * k;
+				line_ROC.y1 = (int)(ROCPLT_ORI_Y - ROCPLT_ROC_RES * roc_vals[(m+k)%100]);
 
-				//Draw
+				line_ROC.x2 = ROCPLT_ORI_X + ROCPLT_GRID_SIZE_X * (k + 1);
+				line_ROC.y2 = (int)(ROCPLT_ORI_Y - ROCPLT_ROC_RES * roc_vals[(m+k+1)%100]);
+
+				// Draw
 				alt_up_pixel_buffer_dma_draw_line(pixel_buf, line_freq.x1, line_freq.y1, line_freq.x2, line_freq.y2, 0x3ff << 0, 0);
 				alt_up_pixel_buffer_dma_draw_line(pixel_buf, line_ROC.x1, line_ROC.y1, line_ROC.x2, line_ROC.y2, 0x3ff << 0, 0);
 			}
@@ -172,11 +193,36 @@ void service_VGA()
 		i = j;
 		i += 2;
 
-		sprintf(VGA_print_buffer, "Five most recent freq values: %.2f, %.2f, %.2f, %.2f, %.2f",
-								 freq_vals[n], freq_vals[n+1], freq_vals[n+2], freq_vals[n+3], freq_vals[n+4]);
-			alt_up_char_buffer_string(char_buf, (char*)VGA_print_buffer, 0, i+=2);
+		// Problem is n & m actually does not index the current value...
+		// the iterator is incremented in empy_queue...
+		// But no, this is EXACTLY the LATEST VALUES! (per service_VGA update)
+		uint n_1, n_2, n_3, n_4;
+		n_1 = (n-1)>99 ? 99 : n-1;
+		n_2 = (n-2)>99 ? 98 : n-2;
+		n_3 = (n-3)>99 ? 97 : n-3;
+		n_4 = (n-4)>99 ? 96 : n-4;
 
-			alt_up_char_buffer_string(char_buf, " Five most recent ROC values:", 0, i+=2);
+		sprintf(VGA_print_buffer, "Five most recent freq values: %.2f, %.2f, %.2f, %.2f, %.2f",
+								 freq_vals[n],
+								 freq_vals[n_1],
+								 freq_vals[n_2],
+								 freq_vals[n_3],
+								 freq_vals[n_4]);
+		alt_up_char_buffer_string(char_buf, (char*)VGA_print_buffer, 0, i+=2);
+
+		uint m_1, m_2, m_3, m_4;
+		m_1 = (m-1)>99 ? 99 : m-1;
+		m_2 = (m-2)>99 ? 98 : m-2;
+		m_3 = (m-3)>99 ? 97 : m-3;
+		m_4 = (m-4)>99 ? 96 : m-4;
+
+		sprintf(VGA_print_buffer, "Five most recent freq values: %3.2f, %3.2f, %3.2f, %3.2f, %3.2f",
+									 roc_vals[m],
+									 roc_vals[m_1],
+									 roc_vals[m_2],
+									 roc_vals[m_3],
+									 roc_vals[m_4]);
+		alt_up_char_buffer_string(char_buf, (char*)VGA_print_buffer, 0, i+=2);
 
 #ifdef MOCK_RESPONSE
 		if (uxQueueMessagesWaiting(Q_response_time) != 0)
@@ -195,10 +241,11 @@ void service_VGA()
 			}
 		}
 #endif
+		vTaskDelay(15);
 	}
 }
 
-void empty_queue(char mux, double* local_vals, uint* n)
+void empty_queue(char mux, double* local_vals, uint* iterator)
 {
 	double data = 0;
 	uint i = 0;
@@ -219,10 +266,10 @@ void empty_queue(char mux, double* local_vals, uint* n)
 	while(uxQueueMessagesWaiting(Q) != 0)
 	{
 		xQueueReceive(Q, &data, portMAX_DELAY);
-		printf("Emptied values %d is %f\n", i, data);
-		(*n) = ++(*n)%100;
-		local_vals[(*n)] = data;
-		printf("Local values %d is %f\n", (*n), local_vals[(*n)]);
+//		printf("Emptied values %d is %f\n", i, data);
+		(*iterator) = ++(*iterator)%100;
+		local_vals[(*iterator)] = data;
+//		printf("Local values %d is %f\n", (*iterator), local_vals[(*iterator)]);
 		i++;
 	}
 }
@@ -235,8 +282,8 @@ void empty_response_queue(uint* local_vals)
 	while(uxQueueMessagesWaiting(Q_response_time) != 0)
 	{
 		xQueueReceive(Q_response_time, &data, portMAX_DELAY);
-		printf("Emptied values %d is %d\n", i, data);
-//		local_vals[i] = data;
+//		printf("Emptied values %d is %d\n", i, data);
+		local_vals[i] = data;
 //		printf("Emptied values %d is %d\n", i, local_vals[i]);
 		i++;
 	}
