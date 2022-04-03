@@ -19,7 +19,6 @@ void init_freq_analyser()
 	// initialize the frequency analyser IRQ
 	alt_irq_register(FREQUENCY_ANALYSER_IRQ, 0, (alt_isr_func) freq_relay);
 	printf("init_freq_analyser Completed\n");
-
 }
 
 void calc_freq_ROC()
@@ -58,25 +57,49 @@ void calc_freq_ROC()
         if (flag_first_run)
         {
 			// calculate the new frequency ROC value
+#ifdef PRINT_CALC_VAL
         	printf("Calc ROC:\n");
         	printf("new_freq_value: %f\n", new_freq_value);
         	printf("old_freq_value: %f\n", old_freq_value);
         	printf("new_freq_ADC_samples: %d\n", new_freq_ADC_samples);
         	printf("old_freq_ADC_samples: %d\n", old_freq_ADC_samples);
-
-			freq_ROC_value = abs((new_freq_value - old_freq_value) * SAMPLING_FREQ) / (new_freq_ADC_samples + old_freq_ADC_samples );
+#endif
+        	freq_ROC_value = abs((new_freq_value - old_freq_value) * 2.0 * new_freq_value* old_freq_value / (new_freq_value + old_freq_value));
         }
 
+#ifdef PRINT_CALC_VAL
         printf("Report:\n");
         printf("new_freq_value: %f\nfreq_ROC_value: %f\n", new_freq_value, freq_ROC_value);
+#endif
+
+        if (xSemaphoreTake(freq_queue_sem, portMAX_DELAY) == pdTRUE)
+		{
+			xQueueSendToBack(Q_freq_calc_values, &new_freq_value, portMAX_DELAY);
+			xSemaphoreGive(freq_queue_sem);
+		} else {
+			printf("freq_queue_sem Semaphore cannot be taken!\n");
+		}
 
         flag_first_run = TRUE;
 
+        /* Mock Response time Section */
+#ifdef MOCK_RESPONSE
         response_timer_start();
-        vTaskDelay(3000);
+//        vTaskDelay(1000);
         response_timer_end();
-        printf("Task is delayed: %u ms\n", calc_response_time());
+        uint time = 2;// calc_response_time();
 
+        if (xSemaphoreTake(response_time_sem, portMAX_DELAY) == pdTRUE)
+		{
+			printf("Task is delayed: %u ms\n", time);
+			xQueueSendToBack(Q_response_time, &time, portMAX_DELAY);
+			xSemaphoreGive(response_time_sem);
+		} else {
+			printf("response_time_sem Semaphore cannot be taken!\n");
+		}
+#endif
+#ifdef PRINT_CALC_VAL
         printf("#########################\n");
+#endif
 	}
 }

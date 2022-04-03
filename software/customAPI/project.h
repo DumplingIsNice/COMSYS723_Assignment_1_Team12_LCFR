@@ -58,6 +58,7 @@
 #include "../RTOS/tasks.h"
 #include "../RTOS/handle_keyboard.h"
 #include "../RTOS/calc_freq_ROC.h"
+#include "../RTOS/service_VGA.h"
 
 // Common macros
 #define HIGH 	1
@@ -66,5 +67,12 @@
 #define FALSE	0
 
 #define RESET 0
+
+// Mock Debugging Defined
+// Enable, disable dummy response timing functionality
+//#define MOCK_RESPONSE
+
+// Prints calculated values in calc_freq_roc
+//#define PRINT_CALC_VAL
 
 #endif /* PROJECT_H_ */

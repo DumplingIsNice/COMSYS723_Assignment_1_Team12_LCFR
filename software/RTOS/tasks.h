@@ -16,6 +16,7 @@
 // Definition of Task Priorities
 #define CALC_FREQ_ROC_PRIORITY 		configMAX_PRIORITIES - 1
 #define HANDLE_KEYBOARD_PRIORITY 	configMAX_PRIORITIES - 2
+#define SERVICE_VGA_PRIORITY 		configMAX_PRIORITIES - 4
 
 // Definition of Periods
 

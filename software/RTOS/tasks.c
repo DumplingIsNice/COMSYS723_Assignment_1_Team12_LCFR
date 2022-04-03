@@ -13,9 +13,17 @@ int init_OS_data_structs(void)
 	ps2_keyboard_inbox = xQueueCreate(PS2_KEYBOARD_QUEUE_SIZE, sizeof(char*));
 	ps2_keyboard_sem = xSemaphoreCreateCounting(9999, 1);
 
-	// create the queue
 	Q_ADC_sample_values = xQueueCreate(FREQ_ADC_QUEUE_SIZE, sizeof(unsigned int));
 	freq_ADC_received_semaphore = xSemaphoreCreateCounting(9999, 1);
+
+	Q_response_time = xQueueCreate(FREQ_RESPONSE_QUEUE_SIZE, sizeof(unsigned int));
+	response_time_sem = xSemaphoreCreateMutex();
+
+	Q_roc_calc_values = xQueueCreate(ROC_DATA_QUEUE_SIZE, sizeof(double));
+	roc_queue_sem = xSemaphoreCreateMutex();
+
+	Q_freq_calc_values = xQueueCreate(FREQ_DATA_QUEUE_SIZE, sizeof(double));
+	freq_queue_sem = xSemaphoreCreateMutex();
 
 	printf("Data Structs Created!\n");
 	return 0;
@@ -47,6 +55,14 @@ int init_create_tasks(void)
 			TASK_STACKSIZE,
 			NULL,
 			HANDLE_KEYBOARD_PRIORITY,
+			NULL);
+
+	xTaskCreate(
+			service_VGA,
+			"service_VGA",
+			TASK_STACKSIZE,
+			NULL,
+			SERVICE_VGA_PRIORITY,
 			NULL);
 
 	printf("Tasks Created!\n");

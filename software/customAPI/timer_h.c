@@ -30,7 +30,9 @@ void response_timer_init()
 uint calc_response_time()
 {
 	uint t = (unsigned int)((timestamp_end_time - timestamp_start_time) - timestamp_overhead_time);
-	return (unsigned int) (t*timestamp_factor_ms);
+	t = (unsigned int) (t*timestamp_factor_ms);
+	xQueueSendToBack(Q_response_time, (void*) &t, portMAX_DELAY);
+	return t;
 }
 
 void response_timer_start()
