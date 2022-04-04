@@ -12,7 +12,7 @@
 #include "altera_up_avalon_video_character_buffer_with_dma.h"
 #include "altera_up_avalon_video_pixel_buffer_dma.h"
 
-/* Graphing Parameters */
+/* Graphing Parameters & Structs */
 
 #define MIN_FREQ 45
 
@@ -35,11 +35,13 @@ typedef struct{
 
 /* Data Sizes */
 
+// Inter-task queues
 #define FREQ_RESPONSE_QUEUE_SIZE 	1000
 #define FREQ_DATA_QUEUE_SIZE		1000
 #define ROC_DATA_QUEUE_SIZE 		1000
 
-#define RESPONSE_TIME_BUF_SIZE		FREQ_RESPONSE_QUEUE_SIZE
+// Local buffers
+#define RESPONSE_TIME_BUF_SIZE		20
 #define FREQ_DATA_BUF_SIZE			100
 #define ROC_DATA_BUF_SIZE			100
 
@@ -56,7 +58,17 @@ QueueHandle_t Q_response_time;
 
 void service_VGA();
 
+// Empties either freq or roc queue
+/* Inputs:
+ * - freq or roc identifier - see header file define
+ * - local buffer array
+ * - iterator for the buffer
+ */
 void empty_queue(char mux, double* local_vals, uint* n);
+// Same as empty queue, but fixed for response time
 void empty_response_queue(uint* local_vals);
+
+// Calculates highlight response values to be displayed from local buffer
+void calc_response_values(const uint* response_time_vals, uint* max, uint* min, uint* avg);
 
 #endif /* RTOS_SERVICE_VGA_H_ */

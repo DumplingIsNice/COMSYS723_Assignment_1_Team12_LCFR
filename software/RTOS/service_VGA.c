@@ -31,29 +31,31 @@ void service_VGA()
 
 	printf("service_VGA Running\n");
 
-	char VGA_print_buffer[] = "";
+	static uint service_VGA_counter = 0;
+
+	char VGA_print_buffer[100] = "";
 
 	// Local Buffers to hold value for display
-	uint response_time_vals[RESPONSE_TIME_BUF_SIZE] = {0};
-
 	double freq_vals[FREQ_DATA_BUF_SIZE] = {0};
 	double roc_vals[ROC_DATA_BUF_SIZE] = {0};
-	uint n = 99; // Iterator
+
+	uint n = FREQ_DATA_BUF_SIZE-1; // Iterator
 	uint* n_p = &n;
-	uint m = 99; // Iterator
+	uint m = ROC_DATA_BUF_SIZE-1; // Iterator
 	uint* m_p = &m;
 
+	uint response_time_vals[RESPONSE_TIME_BUF_SIZE] = {0};
+
+	// Local Variables
 	double threshold_freq = 12.2;
 	double threshold_roc = 12.3;
 
-	char sys_status[] = "Stable";
+	char sys_status[20] = "Stable";
 
-	static uint service_VGA_counter = 0;
-
-	uint max = 1;
-	uint min = 2;
-	uint avg = 3;
-	uint sys = 5;
+	uint response_max = 1;
+	uint response_min = 2;
+	uint response_avg = 3;
+	uint sys_up_time = 5;
 
 	Line line_freq, line_ROC;
 
@@ -95,7 +97,26 @@ void service_VGA()
 			}
 		}
 
+		// Empty and calc response time
+#ifdef MOCK_RESPONSE
+		if (uxQueueMessagesWaiting(Q_response_time) != 0)
+		{
+//			printf("!!!!!!!!!!!!Waiting!!!!!!!!!!!!\n");
+			if (xSemaphoreTake(response_time_sem, portMAX_DELAY) == pdTRUE)
+			{
+//				printf("!!!!!!!!!!!!Emptying Queue!!!!!!!!!!!!\n");
+				empty_response_queue(response_time_vals);
+				xSemaphoreGive(response_time_sem);
+//				printf("!!!!!!!!!!!!Finished Emptying Queue!!!!!!!!!!!!\n");
+			} else {
+				printf("response_time_sem Semaphore cannot be taken!\n");
+			}
+		}
+
+		calc_response_values(response_time_vals, &response_max, &response_min, &response_avg);
+#endif
 		/* Draws Graph */
+		// Fetched and modified from freq_plot_example in example code
 
 		// Clear old graph
 		alt_up_pixel_buffer_dma_draw_box(pixel_buf, 101, 210, 600, 360, 0, 0);
@@ -126,6 +147,8 @@ void service_VGA()
 		alt_up_char_buffer_string(char_buf, "-30", 9, i+=2);
 		alt_up_char_buffer_string(char_buf, "-60", 9, i+=2);
 
+		// Compensation, for that n actually points to the newest data here
+		n++;
 		for(uint k=0;k<99;++k){ //i here points to the oldest data, j loops through all the data to be drawn on VGA
 			if (((int)(freq_vals[(n+k)%100]) > MIN_FREQ) && ((int)(freq_vals[(n+k+1)%100]) > MIN_FREQ))
 			{
@@ -149,6 +172,8 @@ void service_VGA()
 				alt_up_pixel_buffer_dma_draw_line(pixel_buf, line_ROC.x1, line_ROC.y1, line_ROC.x2, line_ROC.y2, 0x3ff << 0, 0);
 			}
 		}
+		n--;
+		// Compensation, for that n actually points to the newest data here
 
 		/* Display Information */
 
@@ -181,13 +206,13 @@ void service_VGA()
 			alt_up_char_buffer_string(char_buf, (char*)VGA_print_buffer, 42, i+=2);
 
 		alt_up_char_buffer_string(char_buf, "Threshold Exceed Response Time:", 40, i+=2);
-		sprintf(VGA_print_buffer, "Max: %d", max);
+		sprintf(VGA_print_buffer, "Max: %d", response_max);
 			alt_up_char_buffer_string(char_buf, (char*)VGA_print_buffer, 42, i+=2);
-		sprintf(VGA_print_buffer, "Min: %d", min);
+		sprintf(VGA_print_buffer, "Min: %d", response_min);
 			alt_up_char_buffer_string(char_buf, (char*)VGA_print_buffer, 42, i+=2);
-		sprintf(VGA_print_buffer, "Avg: %d", avg);
+		sprintf(VGA_print_buffer, "Avg: %d", response_avg);
 			alt_up_char_buffer_string(char_buf, (char*)VGA_print_buffer, 42, i+=2);
-		sprintf(VGA_print_buffer, "Total System Up-time: %d", sys);
+		sprintf(VGA_print_buffer, "Total System Up-time: %d", sys_up_time);
 			alt_up_char_buffer_string(char_buf, (char*)VGA_print_buffer, 40, i+=2);
 
 		i = j;
@@ -226,28 +251,17 @@ void service_VGA()
 									 roc_vals[m_4]);
 		alt_up_char_buffer_string(char_buf, (char*)VGA_print_buffer, 0, i+=2);
 
-#ifdef MOCK_RESPONSE
-		if (uxQueueMessagesWaiting(Q_response_time) != 0)
-		{
-			printf("!!!!!!!!!!!!Waiting!!!!!!!!!!!!\n");
-			if (xSemaphoreTake(response_time_sem, portMAX_DELAY) == pdTRUE)
-			{
-				printf("!!!!!!!!!!!!Emptying Queue!!!!!!!!!!!!\n");
-				empty_response_queue(response_time_vals);
-				xSemaphoreGive(response_time_sem);
-				printf("!!!!!!!!!!!!Finished Emptying Queue!!!!!!!!!!!!\n");
-				memset(&response_time_vals, 0, RESPONSE_TIME_BUF_SIZE);
-				vTaskDelay(15);
-			} else {
-				printf("response_time_sem Semaphore cannot be taken!\n");
-			}
-		}
-#endif
 		vTaskDelay(15);
 	}
 }
 
-void empty_queue(char mux, double* local_vals, uint* iterator)
+// Empties either freq or roc queue
+/* Inputs:
+ * - freq or roc identifier - see header file define
+ * - local buffer array
+ * - iterator for the buffer
+ */
+void empty_queue(char mux, double local_vals[], uint* iterator)
 {
 	double data = 0;
 	uint i = 0;
@@ -276,18 +290,44 @@ void empty_queue(char mux, double* local_vals, uint* iterator)
 	}
 }
 
+// Same as empty queue, but fixed for response time
 void empty_response_queue(uint* local_vals)
 {
 	uint data = 0;
 	uint i = 0;
+	static uint j = RESPONSE_TIME_BUF_SIZE-1;
 
 	while(uxQueueMessagesWaiting(Q_response_time) != 0)
 	{
 		xQueueReceive(Q_response_time, &data, portMAX_DELAY);
 //		printf("Emptied values %d is %d\n", i, data);
-		local_vals[i] = data;
-//		printf("Emptied values %d is %d\n", i, local_vals[i]);
+		j = ++j%RESPONSE_TIME_BUF_SIZE;
+		local_vals[j] = data;
+//		printf("Local values %d is %d\n", j, local_vals[j]);
 		i++;
 	}
 }
 
+// Calculates highlight response values to be displayed from local buffer
+void calc_response_values(const uint* response_time_vals, uint* max, uint* min, uint* avg)
+{
+	uint sum = 0;
+	uint val = 0;
+	uint no_items = 0;
+
+	for (uint i = 0; i < RESPONSE_TIME_BUF_SIZE; i++)
+	{
+		val = response_time_vals[i];
+		(*max) = val > (*max) ? val : (*max);
+		(*min) = val < (*min) ? val : (*min);
+
+		if (val != 0)
+		{
+//			printf("i: %d, Response time %d\n", i, val);
+			sum += val;
+			no_items++;
+		}
+	}
+	(*avg) = sum/no_items;
+//	printf("AVG: %d MAX: %d MIN: %d\n", (*avg), (*max), (*min));
+}

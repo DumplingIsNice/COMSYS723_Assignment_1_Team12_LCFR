@@ -99,7 +99,7 @@ void calc_freq_ROC()
 
         if (xSemaphoreTake(response_time_sem, portMAX_DELAY) == pdTRUE)
 		{
-			printf("Task is delayed: %u ms\n", time);
+//			printf("Task is delayed: %u ms\n", time);
 			xQueueSendToBack(Q_response_time, &time, portMAX_DELAY);
 			xSemaphoreGive(response_time_sem);
 		} else {
