@@ -202,7 +202,8 @@ void service_VGA()
 		n_3 = (n-3)>99 ? 97 : n-3;
 		n_4 = (n-4)>99 ? 96 : n-4;
 
-		sprintf(VGA_print_buffer, "Five most recent freq values: %.2f, %.2f, %.2f, %.2f, %.2f",
+		// Ending spaces is to clear end of display or any lingering character
+		sprintf(VGA_print_buffer, "Five most recent freq values: %.2f, %.2f, %.2f, %.2f, %.2f  ",
 								 freq_vals[n],
 								 freq_vals[n_1],
 								 freq_vals[n_2],
@@ -216,7 +217,8 @@ void service_VGA()
 		m_3 = (m-3)>99 ? 97 : m-3;
 		m_4 = (m-4)>99 ? 96 : m-4;
 
-		sprintf(VGA_print_buffer, "Five most recent freq values: %3.2f, %3.2f, %3.2f, %3.2f, %3.2f",
+		// Ending spaces is to clear end of display or any lingering character
+		sprintf(VGA_print_buffer, " Five most recent roc values: %+5.2f, %+5.2f, %+5.2f, %+5.2f, %+5.2f    ",
 									 roc_vals[m],
 									 roc_vals[m_1],
 									 roc_vals[m_2],
