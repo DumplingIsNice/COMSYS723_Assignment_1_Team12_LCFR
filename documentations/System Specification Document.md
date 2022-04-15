@@ -164,16 +164,16 @@ Memory for 2x5=10 frequency & ROC value
 - Distinguish sub-routines vs tasks
 - Determine data packages and the messages passed from one task to another
 
-**Task:
-Type:** 
-periodic (what period?)... event driven (what event?)
-**Behaviour:**
-What does it do?
-**Function Calls:**
-What function/subroutine it calls?
-**Message passed:**
-...to... 
-**Shared Resource Access:**
-...with...(task)
+- **Task:**
+- **Type:** 
+	- periodic (what period?)... event driven (what event?)
+- **Behaviour:**
+	- What does it do?
+- **Function Calls:**
+	- What function/subroutine it calls?
+- **Message passed:**
+	- ...to... 
+- **Shared Resource Access:**
+	- ...with...(task)
 
 ### FreeRTOS Features usage (Necessary + Justification)
