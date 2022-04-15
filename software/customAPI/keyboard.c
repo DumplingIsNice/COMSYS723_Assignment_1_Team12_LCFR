@@ -8,7 +8,7 @@
 #include "keyboard.h"
 
 // Private global variable
-char global_string[] = "";
+char global_string[GLOBAL_STRING_SIZE] = "";
 
 // ps2 isr to read the immediate input code and signal
 // handle_keyboard task

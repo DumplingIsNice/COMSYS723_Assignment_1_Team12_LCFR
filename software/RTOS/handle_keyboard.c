@@ -72,7 +72,7 @@ void handle_keyboard()
 	uint status = FALSE;
 	char received_string[] = "";
 
-	static char logged_string[] = "";
+	static char logged_string[GLOBAL_STRING_SIZE] = "";
 	static char mode = NO_COMMAND;
 
 	while(TRUE)

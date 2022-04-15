@@ -13,6 +13,8 @@
 #define KEY_ENTER 	0x5a
 #define STR_ENTER   "ENT"
 
+#define GLOBAL_STRING_SIZE 100
+
 // ps2 isr to read the immediate input code and signal
 // handle_keyboard task
 void ps2_isr (void* context, alt_u32 id);
