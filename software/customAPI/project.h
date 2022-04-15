@@ -49,6 +49,8 @@
 #include "keyboard.h"
 #include "timer_h.h"
 
+#include "../RTOS/global.h"
+
 // Scheduler includes
 #include "../freertos/FreeRTOS.h"
 #include "../freertos/task.h"
@@ -67,6 +69,8 @@
 #define FALSE	0
 
 #define RESET 0
+
+#define DEBUG
 
 // Mock Debugging Defined
 // Enable, disable dummy response timing functionality

@@ -19,11 +19,14 @@
 #define SERVICE_VGA_PRIORITY 		configMAX_PRIORITIES - 4
 
 // Definition of Periods
+#define RESPONSE_TIME_WINDOW 	200
+#define VALIDATION_TIME_WINDOW  500
+
+// Global Variable Semaphores
+SemaphoreHandle_t global_system_status_sem;
 
 // Task handles used to delete a task
 TaskHandle_t xHandle;
-
-// Global variables
 
 /* Task Function Declarations */
 

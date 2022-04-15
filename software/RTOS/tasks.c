@@ -25,6 +25,8 @@ int init_OS_data_structs(void)
 	Q_freq_calc_values = xQueueCreate(FREQ_DATA_QUEUE_SIZE, sizeof(double));
 	freq_queue_sem = xSemaphoreCreateMutex();
 
+	global_system_status_sem = xSemaphoreCreateMutex();
+
 	printf("Data Structs Created!\n");
 	return 0;
 }

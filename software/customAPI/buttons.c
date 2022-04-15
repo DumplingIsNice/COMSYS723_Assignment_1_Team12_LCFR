@@ -9,13 +9,16 @@
 
 void buttons_interrupt_function(void* context, alt_u32 id)
 {
-  // need to cast the context first before using it
-  int* temp = (int*) context;
-  (*temp) = GET_BUTTONS;
-  printf("Button is: %d\n", *temp);
+	// need to cast the context first before using it
+	int* temp = (int*) context;
+	(*temp) = GET_BUTTONS;
+	printf("Button is: %d\n", *temp);
 
-  // clears the edge capture register
-  CLR_BUTTONS_EDGE;
+	if(*temp == BUTTON_3)
+		toggle_global_maintainence();
+
+	// clears the edge capture register
+	CLR_BUTTONS_EDGE;
 }
 
 alt_u32* buttons_init()
@@ -31,6 +34,8 @@ alt_u32* buttons_init()
 
 	// register the ISR, CONTEXT IS THE PASSED POINTER ARGUMENT
 	alt_irq_register(PUSH_BUTTON_IRQ, (void*)p_flag_btn, buttons_interrupt_function);
+
+	CLEAR_LED_GREEN;
 
 	return p_flag_btn;
 }

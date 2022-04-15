@@ -19,7 +19,7 @@
  */
 uint handle_threshold_string_input(const char *string, char threshold_type)
 {
-	uint status = 0;
+	uint status = FALSE;
 	char* pEnd;
 	double threshold = strtod(string, &pEnd);
 	printf("Threshold: %f\n", threshold);
@@ -30,12 +30,14 @@ uint handle_threshold_string_input(const char *string, char threshold_type)
 			case FREQ_COMMAND:
 				// Mutex, perform threshold setting
 				printf("Freq Threshold: %f\n", threshold);
-				status = 1;
+				set_global_threshold_freq(threshold);
+				status = TRUE;
 				break;
 			case RATE_COMMAND:
 				// Mutex, perform threshold setting
 				printf("Rate Threshold: %f\n", threshold);
-				status = 1;
+				set_global_threshold_roc(threshold);
+				status = TRUE;
 				break;
 			default:
 				printf("NO THRESHOLD SET!!!");

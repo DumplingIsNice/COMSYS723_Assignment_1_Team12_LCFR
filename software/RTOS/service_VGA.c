@@ -47,15 +47,15 @@ void service_VGA()
 	uint response_time_vals[RESPONSE_TIME_BUF_SIZE] = {0};
 
 	// Local Variables
+	char sys_status[SYS_STATUS_SIZE] = SYS_STAT_STABLE;
 	double threshold_freq = 12.2;
 	double threshold_roc = 12.3;
 
-	char sys_status[20] = "Stable";
+	uint sys_up_time = 5;
 
 	uint response_max = 1;
 	uint response_min = 2;
 	uint response_avg = 3;
-	uint sys_up_time = 5;
 
 	Line line_freq, line_ROC;
 
@@ -66,6 +66,11 @@ void service_VGA()
 		uint j = 0;
 
 		/* Data Reading */
+
+		threshold_freq = get_global_threshold_freq();
+		threshold_roc = get_global_threshold_roc();
+
+		get_global_sys_status(sys_status);
 
 		// Empties Freq data queue
 		if (uxQueueMessagesWaiting(Q_freq_calc_values) != 0)
@@ -119,8 +124,8 @@ void service_VGA()
 		// Fetched and modified from freq_plot_example in example code
 
 		// Clear old graph
-		alt_up_pixel_buffer_dma_draw_box(pixel_buf, 101, 210, 600, 359, 2, 0);
-		alt_up_pixel_buffer_dma_draw_box(pixel_buf, 101, 380, 600, 459, 2, 0);
+		alt_up_pixel_buffer_dma_draw_box(pixel_buf, 101, 210, 600, 359, 0, 0);
+		alt_up_pixel_buffer_dma_draw_box(pixel_buf, 101, 380, 600, 459, 0, 0);
 
 		// Freq
 		alt_up_pixel_buffer_dma_draw_hline(pixel_buf, 100, 590, 360, ((0x3ff << 20) + (0x3ff << 10) + (0x3ff)), 0);
@@ -177,13 +182,15 @@ void service_VGA()
 
 		/* Display Information */
 
+		// Any ending spaces is to clear end of display or any lingering character
+
 		alt_up_char_buffer_string(char_buf, "Team 12", 0, 1);
 		alt_up_char_buffer_string(char_buf, "LCFR", 10, 1);
 
 		i = 2;
 		j = 0;
 
-		sprintf(VGA_print_buffer, "service_VAG Running Counter: %d", service_VGA_counter++);
+		sprintf(VGA_print_buffer, "service_VGA Running Counter: %d", service_VGA_counter++);
 			alt_up_char_buffer_string(char_buf, (char*)VGA_print_buffer, 0, i+=2);
 
 		alt_up_char_buffer_string(char_buf, "By:", 0, i+=2);
@@ -193,26 +200,26 @@ void service_VGA()
 		i += 2;
 
 		alt_up_char_buffer_string(char_buf, "System Infomation: ", 0, i+=2);
-		sprintf(VGA_print_buffer, "Status: %s", sys_status);
+		sprintf(VGA_print_buffer, "Status: %s     ", sys_status);
 			alt_up_char_buffer_string(char_buf, (char*)VGA_print_buffer, 0, i+=2);
 
 		j = i;
 		i = 0;
 
 		alt_up_char_buffer_string(char_buf, "Thresholds:", 40, i+=2);
-		sprintf(VGA_print_buffer, "Freq: %.2f", threshold_freq);
+		sprintf(VGA_print_buffer, "Freq (Hz): %.2f    ", threshold_freq);
 			alt_up_char_buffer_string(char_buf, (char*)VGA_print_buffer, 42, i+=2);
-		sprintf(VGA_print_buffer, " RoC: %.2f", threshold_roc);
+		sprintf(VGA_print_buffer, " RoC (Hz/s): %.2f    ", threshold_roc);
 			alt_up_char_buffer_string(char_buf, (char*)VGA_print_buffer, 42, i+=2);
 
-		alt_up_char_buffer_string(char_buf, "Threshold Exceed Response Time:", 40, i+=2);
-		sprintf(VGA_print_buffer, "Max: %d", response_max);
+		alt_up_char_buffer_string(char_buf, "Threshold Exceed Response Time (s):", 40, i+=2);
+		sprintf(VGA_print_buffer, "Max: %d    ", response_max);
 			alt_up_char_buffer_string(char_buf, (char*)VGA_print_buffer, 42, i+=2);
-		sprintf(VGA_print_buffer, "Min: %d", response_min);
+		sprintf(VGA_print_buffer, "Min: %d    ", response_min);
 			alt_up_char_buffer_string(char_buf, (char*)VGA_print_buffer, 42, i+=2);
-		sprintf(VGA_print_buffer, "Avg: %d", response_avg);
+		sprintf(VGA_print_buffer, "Avg: %d    ", response_avg);
 			alt_up_char_buffer_string(char_buf, (char*)VGA_print_buffer, 42, i+=2);
-		sprintf(VGA_print_buffer, "Total System Up-time: %d", sys_up_time);
+		sprintf(VGA_print_buffer, "Total System Up-time: %d    ", sys_up_time);
 			alt_up_char_buffer_string(char_buf, (char*)VGA_print_buffer, 40, i+=2);
 
 		i = j;
@@ -228,7 +235,7 @@ void service_VGA()
 		n_4 = (n-4)>99 ? 96 : n-4;
 
 		// Ending spaces is to clear end of display or any lingering character
-		sprintf(VGA_print_buffer, "Five most recent freq values: %.2f, %.2f, %.2f, %.2f, %.2f  ",
+		sprintf(VGA_print_buffer, "Five most recent freq values  (Hz): %.2f, %.2f, %.2f, %.2f, %.2f  ",
 								 freq_vals[n],
 								 freq_vals[n_1],
 								 freq_vals[n_2],
@@ -243,7 +250,7 @@ void service_VGA()
 		m_4 = (m-4)>99 ? 96 : m-4;
 
 		// Ending spaces is to clear end of display or any lingering character
-		sprintf(VGA_print_buffer, " Five most recent roc values: %+5.2f, %+5.2f, %+5.2f, %+5.2f, %+5.2f    ",
+		sprintf(VGA_print_buffer, "Five most recent roc values (Hz/s): %+5.2f, %+5.2f, %+5.2f, %+5.2f, %+5.2f    ",
 									 roc_vals[m],
 									 roc_vals[m_1],
 									 roc_vals[m_2],
