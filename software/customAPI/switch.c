@@ -7,11 +7,6 @@
 
 #include "switch.h"
 
-void handle_switches(load_data* p_data)
-{
-	;
-}
-
 // Checks the status of a switch at position and return status
 	/* Inputs:
 	 * Switch position macro
@@ -42,5 +37,14 @@ uint check_switch(uint switch_pos)
 	return switch_status;
 }
 
+void handle_switches()
+{
+	printf("handle_switches running\n");
+	while (TRUE)
+	{
+		shed_load();
+		vTaskDelay(300);
+	}
+}
 
 

@@ -10,11 +10,6 @@
 
 #include "project.h"
 
-typedef struct load_data
-{
-	uint load_num;
-} load_data;
-
 // Switches Binary Positions
 #define SWITCH_0	(1 << 0)
 #define SWITCH_1	(1 << 1)
@@ -34,7 +29,7 @@ typedef struct load_data
 	 * Inputs:
 	 * load data package
 	 */
-void handle_switches(load_data* p_data);
+void handle_switches();
 
 // Checks the status of a switch at position and return status
 	/* Inputs:

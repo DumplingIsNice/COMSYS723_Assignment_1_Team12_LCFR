@@ -67,6 +67,14 @@ int init_create_tasks(void)
 			SERVICE_VGA_PRIORITY,
 			NULL);
 
+	xTaskCreate(
+			handle_switches,
+			"handle_switches",
+			TASK_STACKSIZE,
+			NULL,
+			HANDLE_SWITCHES_PRIORITY,
+			NULL);
+
 	printf("Tasks Created!\n");
 	return 0;
 }

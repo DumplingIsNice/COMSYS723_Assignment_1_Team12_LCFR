@@ -7,6 +7,10 @@
 
 #include "global.h"
 
+static char global_system_status = STABLE;
+static double global_threshold_freq = 0;
+static double global_threshold_roc = 0;
+
 void set_global_threshold_freq(double threshold)
 {
 	global_threshold_freq = (double)threshold;
@@ -57,10 +61,26 @@ void set_global_sys_status(char status)
 	} else {
 		printf("global_system_status_sem Semaphore cannot be taken!\n");
 	}
-
 }
 
-void get_global_sys_status(char *local_buf)
+void set_global_sys_status_from_ISR(char status)
+{
+	// Needs semaphore
+	if (xSemaphoreTakeFromISR(global_system_status_sem, portMAX_DELAY) == pdTRUE)
+	{
+		global_system_status = status;
+		xSemaphoreGiveFromISR(global_system_status_sem, portMAX_DELAY);
+	} else {
+		printf("global_system_status_sem Semaphore cannot be taken!\n");
+	}
+}
+
+char get_global_sys_status()
+{
+	return global_system_status;
+}
+
+void get_string_global_sys_status(char *local_buf)
 {
 	switch (global_system_status)
 	{

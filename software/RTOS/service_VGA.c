@@ -70,7 +70,7 @@ void service_VGA()
 		threshold_freq = get_global_threshold_freq();
 		threshold_roc = get_global_threshold_roc();
 
-		get_global_sys_status(sys_status);
+		get_string_global_sys_status(sys_status);
 
 		// Empties Freq data queue
 		if (uxQueueMessagesWaiting(Q_freq_calc_values) != 0)
@@ -258,7 +258,7 @@ void service_VGA()
 									 roc_vals[m_4]);
 		alt_up_char_buffer_string(char_buf, (char*)VGA_print_buffer, 0, i+=2);
 
-		vTaskDelay(15);
+		vTaskDelay(10);
 	}
 }
 

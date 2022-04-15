@@ -61,6 +61,7 @@
 #include "../RTOS/handle_keyboard.h"
 #include "../RTOS/calc_freq_ROC.h"
 #include "../RTOS/service_VGA.h"
+#include "../RTOS/handle_load.h"
 
 // Common macros
 #define HIGH 	1
@@ -68,7 +69,7 @@
 #define TRUE	1
 #define FALSE	0
 
-#define RESET 0
+#define RESET   0
 
 #define DEBUG
 

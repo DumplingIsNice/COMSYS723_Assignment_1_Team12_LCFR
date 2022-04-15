@@ -28,10 +28,6 @@
 
 #define SYS_STATUS_SIZE 20
 
-static char global_system_status = STABLE;
-static double global_threshold_freq = 0;
-static double global_threshold_roc = 0;
-
 /* Function Declaration */
 
 // Getter and Setters
@@ -43,6 +39,8 @@ double get_global_threshold_roc();
 
 void toggle_global_maintainence();
 void set_global_sys_status(char status);
-void get_global_sys_status(char *local_buf);
+void set_global_sys_status_from_ISR(char status);
+char get_global_sys_status();
+void get_string_global_sys_status(char *local_buf);
 
 #endif /* RTOS_GLOBAL_H_ */
