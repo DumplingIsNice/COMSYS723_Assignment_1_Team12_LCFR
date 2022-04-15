@@ -164,7 +164,7 @@ Memory for 2x5=10 frequency & ROC value
 - Distinguish sub-routines vs tasks
 - Determine data packages and the messages passed from one task to another
 
-- **Task:**
+#### Task Spec:
 - **Type:** 
 	- periodic (what period?)... event driven (what event?)
 - **Behaviour:**
@@ -177,3 +177,7 @@ Memory for 2x5=10 frequency & ROC value
 	- ...with...(task)
 
 ### FreeRTOS Features usage (Necessary + Justification)
+
+- Queue
+- Mutex
+- Software Timer
