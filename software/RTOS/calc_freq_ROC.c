@@ -111,5 +111,51 @@ void calc_freq_ROC()
 #ifdef PRINT_CALC_VAL
         printf("#########################\n");
 #endif
+
+        threshold_monitor(new_freq_value, freq_ROC_value);
+	}
+}
+
+static uint threshold_exceeded = FALSE;
+
+uint is_threshold_exceeded()
+{
+	return threshold_exceeded;
+}
+
+/* Checks the most recent values of freq and roc against threshold
+ * Then updates threshold exceeded flag.
+ * Note: This is also the top-most level (gatekeeping) of unstable
+ * loop of control flow.
+ *
+ * Gated By the Following Conditions:
+ *
+ * - is_verification_elapsed()
+ * - global variable of system status (global_sys_status)
+ * - is_threshold_exceeded()
+ */
+void threshold_monitor(const double current_freq, const double current_roc)
+{
+	if (is_verification_elapsed() && get_global_sys_status() != MAINTAIN)
+	{
+		if (current_freq > get_global_threshold_freq() || abs(current_roc) > fabs(get_global_threshold_roc()))
+		{
+
+#ifdef DEBUG
+			printf("Threshold exceeded!!!\n");
+			printf("current_freq: %f\n", current_freq);
+			printf("current_roc: %f\n", current_roc);
+			printf("threshold roc: %f\n", get_global_threshold_roc());
+			printf("threshold abs: %f\n", fabs(get_global_threshold_roc()));
+#endif
+
+			// Should enable handle_load task to progress
+			set_global_sys_status(UNSTABLE);
+			threshold_exceeded = TRUE;
+		} else {
+			// Should prevent handle_load task to progress
+			set_global_sys_status(STABLE);
+			threshold_exceeded = FALSE;
+		}
 	}
 }

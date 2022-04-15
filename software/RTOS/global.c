@@ -8,8 +8,8 @@
 #include "global.h"
 
 static char global_system_status = STABLE;
-static double global_threshold_freq = 0;
-static double global_threshold_roc = 0;
+static double global_threshold_freq = DEFAULT_FREQ_THRESHOLD;
+static double global_threshold_roc = DEFAULT_ROC_THRESHOLD;
 
 void set_global_threshold_freq(double threshold)
 {

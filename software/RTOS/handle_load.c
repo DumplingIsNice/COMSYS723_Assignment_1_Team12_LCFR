@@ -9,9 +9,25 @@
 
 void handle_load()
 {
-	;
+	printf("handle_load running\n");
+	while (TRUE)
+	{
+		if (is_threshold_exceeded() && is_verification_elapsed()
+			&& get_global_sys_status() != MAINTAIN)
+		{
+			printf("Handling Load!!!\n");
+			verification_timer_start();
+			shed_load();
+		}
+		vTaskDelay(30);
+	}
 }
 
+/* Self-contained logic of load shedding
+ * - Controlled/depends on system state
+ * - Performs only one round of load shedding per call
+ *   (shed up to one load per call)
+ */
 void shed_load()
 {
 	// "LED Load" data
@@ -20,12 +36,8 @@ void shed_load()
 	uint next_load = 0;
 	char sys_status = get_global_sys_status();
 
-
-	// If Validation timer have not been completely elapsed
-	//...
-
-	// If not unstable, perform normal shedding
-	// Otherwise, perform critical shedding!
+	// If not unstable, perform normal load shedding
+	// Otherwise, perform critical load shedding!
 	if (sys_status != UNSTABLE)
 	{
 		update_switch_data(d, NO_OF_LOADS);
@@ -39,6 +51,8 @@ void shed_load()
 		}
 	}
 }
+
+/* Helper Functions */
 
 void update_load_indication(uint d[], uint size)
 {

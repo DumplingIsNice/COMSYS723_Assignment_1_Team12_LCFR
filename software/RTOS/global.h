@@ -16,6 +16,9 @@
  * and their parameters
  */
 
+#define DEFAULT_FREQ_THRESHOLD 51
+#define DEFAULT_ROC_THRESHOLD 8
+
 // System Status Mux
 #define STABLE 		'S'
 #define UNSTABLE 	'U'

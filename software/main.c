@@ -33,6 +33,8 @@ int main()
 {
 	buttons_init();
 
+	verification_timer_init();
+
 	response_timer_init();
 	ps2_keyboard_init();
 	init_freq_analyser();

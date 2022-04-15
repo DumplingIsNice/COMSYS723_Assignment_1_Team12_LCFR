@@ -42,7 +42,10 @@ void handle_switches()
 	printf("handle_switches running\n");
 	while (TRUE)
 	{
-		shed_load();
+		if (get_global_sys_status() != UNSTABLE)
+		{
+			shed_load();
+		}
 		vTaskDelay(300);
 	}
 }

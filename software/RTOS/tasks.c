@@ -75,6 +75,14 @@ int init_create_tasks(void)
 			HANDLE_SWITCHES_PRIORITY,
 			NULL);
 
+	xTaskCreate(
+			handle_load,
+			"handle_load",
+			TASK_STACKSIZE,
+			NULL,
+			HANDLE_LOAD_PRIORITY,
+			NULL);
+
 	printf("Tasks Created!\n");
 	return 0;
 }
