@@ -1,5 +1,5 @@
 /*
- * handle_load.h
+ * handle_load_auto.h
  *
  *  Created on: 15 Apr 2022
  *      Author: Hao Lin
@@ -12,8 +12,17 @@
 
 #define NO_OF_LOADS 5
 
-void handle_load();
+// Task to handle all automatic load shedding
+void handle_load_auto();
 
+/* Self-contained logic of load shedding
+ * - Controlled/depends on system state
+ * - Performs only one round of load shedding per call
+ *   (shed up to one load per call)
+ */
+
+// Note: Might need to implement two different load shedding function...
+// One geen, one red... Modify helper function instead?
 void shed_load();
 
 void update_load_indication(uint d[], uint size);

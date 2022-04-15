@@ -7,15 +7,16 @@
 
 #include "handle_load.h"
 
-void handle_load()
+// Task to handle all automatic load shedding
+void handle_load_auto()
 {
-	printf("handle_load running\n");
+	printf("handle_load_auto running\n");
 	while (TRUE)
 	{
 		if (is_threshold_exceeded() && is_verification_elapsed()
 			&& get_global_sys_status() != MAINTAIN)
 		{
-			printf("Handling Load!!!\n");
+//			printf("Handling Load!!!\n");
 			verification_timer_start();
 			shed_load();
 		}

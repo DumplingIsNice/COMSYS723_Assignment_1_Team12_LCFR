@@ -24,11 +24,7 @@
 // Nios II Switchs API Macros
 #define GET_SWITCHES IORD_ALTERA_AVALON_PIO_DATA(SLIDE_SWITCH_BASE)
 
-// Handles the switching between two modes based on the switch position
-	/*
-	 * Inputs:
-	 * load data package
-	 */
+// Task to handle all manual load shedding
 void handle_switches();
 
 // Checks the status of a switch at position and return status

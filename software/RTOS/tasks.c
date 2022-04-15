@@ -76,8 +76,8 @@ int init_create_tasks(void)
 			NULL);
 
 	xTaskCreate(
-			handle_load,
-			"handle_load",
+			handle_load_auto,
+			"handle_load_auto",
 			TASK_STACKSIZE,
 			NULL,
 			HANDLE_LOAD_PRIORITY,
