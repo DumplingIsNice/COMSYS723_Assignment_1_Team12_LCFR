@@ -119,8 +119,8 @@ void service_VGA()
 		// Fetched and modified from freq_plot_example in example code
 
 		// Clear old graph
-		alt_up_pixel_buffer_dma_draw_box(pixel_buf, 101, 210, 600, 360, 0, 0);
-		alt_up_pixel_buffer_dma_draw_box(pixel_buf, 101, 380, 600, 460, 0, 0);
+		alt_up_pixel_buffer_dma_draw_box(pixel_buf, 101, 210, 600, 359, 2, 0);
+		alt_up_pixel_buffer_dma_draw_box(pixel_buf, 101, 380, 600, 459, 2, 0);
 
 		// Freq
 		alt_up_pixel_buffer_dma_draw_hline(pixel_buf, 100, 590, 360, ((0x3ff << 20) + (0x3ff << 10) + (0x3ff)), 0);
