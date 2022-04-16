@@ -49,9 +49,10 @@ void handle_switches()
 			shed_load(get_load_data(), NO_OF_LOADS);
 		} else {
 			// Perform limited (off) load control
+			// For green and red!
 			;
 		}
-		vTaskDelay(300);
+		vTaskDelay(50);
 	}
 }
 

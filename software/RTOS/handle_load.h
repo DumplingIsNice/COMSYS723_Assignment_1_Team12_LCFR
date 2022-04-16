@@ -24,6 +24,8 @@ void handle_load_auto();
 void shed_load(uint d[], uint size);
 void connect_load(uint d[], uint size);
 
+void shed_load_off_only(uint d[], uint size);
+
 void update_load_indication(uint d[], uint size);
 void update_switch_data(uint d[], uint size);
 

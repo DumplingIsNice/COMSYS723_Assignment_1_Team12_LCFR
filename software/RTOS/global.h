@@ -10,8 +10,6 @@
 
 #include "..\customAPI\project.h"
 
-/* Global Variables */
-
 /* This file host all global variables used across the project
  * and their parameters
  */
@@ -38,6 +36,15 @@
 
 // Load Data
 #define NO_OF_LOADS 5
+
+/* Global Variables */
+
+static char global_system_status = NORMAL;
+static double global_threshold_freq = DEFAULT_FREQ_THRESHOLD;
+static double global_threshold_roc = DEFAULT_ROC_THRESHOLD;
+
+// "LED Load" data
+static uint load_data[NO_OF_LOADS] = {0};
 
 /* Function Declaration */
 

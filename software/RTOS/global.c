@@ -7,13 +7,6 @@
 
 #include "global.h"
 
-static char global_system_status = NORMAL;
-static double global_threshold_freq = DEFAULT_FREQ_THRESHOLD;
-static double global_threshold_roc = DEFAULT_ROC_THRESHOLD;
-
-// "LED Load" data
-static uint load_data[NO_OF_LOADS] = {0};
-
 uint* get_load_data()
 {
 	// Needs sema? handle_switch and handle_load should be interleaved...
