@@ -34,9 +34,6 @@
 
 #define SYS_STATUS_SIZE 20
 
-// Load Data
-#define NO_OF_LOADS 5
-
 /* Global Variables */
 
 static char global_system_status = NORMAL;

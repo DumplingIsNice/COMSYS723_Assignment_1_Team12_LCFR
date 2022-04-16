@@ -7,24 +7,7 @@
 
 #include "handle_load.h"
 
-void set_array_equal(uint* ld, const uint* sd, const uint size, const uint off_only)
-{
-	if (off_only)
-	{
-		for (uint i = 0; i <= size; i++)
-		{
-			if (sd[i] == LOW)
-				ld[i] = sd[i];
-		}
-	} else {
-		for (uint i = 0; i <= size; i++)
-		{
-			ld[i] = sd[i];
-		}
-	}
-}
-
-// Task to handle all automatic load shedding
+// Task to handle all load shedding
 void handle_load_auto()
 {
 	printf("handle_load_auto running\n");
@@ -107,34 +90,30 @@ void connect_load(uint d[], uint a[], const uint s[], const uint size)
 		a[load_index] = LOW;
 		led_write(LED_RED, (1 << load_index), HIGH);
 		led_write(LED_GREEN, (1 << load_index), LOW);
+
+		// Clears all higher green LEDS that had yet been turned off
+		reconnect_indication_clearing(load_index, size);
 	} else {
 		set_global_sys_status(NORMAL);
 		CLEAR_LED_GREEN;
-		return;
 	}
-}
-
-void update_load_indication_off_only(uint d[], uint size)
-{
-//	uint switch_load_data[NO_OF_LOADS] = {0};
-//
-//	update_switch_data(switch_load_data, NO_OF_LOADS);
-//
-//	for (uint i = 0; i < size; i++)
-//	{
-////		printf("d[%d] is %d ", i, d[i]);
-//		if (d[i] == HIGH && switch_load_data[i] == LOW)
-//		{
-//			d[i] = LOW;
-//			led_write(LED_RED, (1 << i), LOW);
-////			led_write(LED_GREEN, (1 << i), LOW);
-////			printf("### d[%d] is %d ###", i, d[i]);
-//		}
-//	}
 }
 
 /* Helper Functions */
 
+// Clears all invalid lingering green LED indications
+	// of loads that HAD been managed by the relay BUT
+	// was switched off manually (despite being off) BEFORE
+	// the relay is able to automatically reconnect the load
+void reconnect_indication_clearing(const uint load_index, const uint size)
+{
+	for (uint i = load_index+1; i < size; i++)
+	{
+		led_write(LED_GREEN, (1 << i), LOW);
+	}
+}
+
+// Updates normal load indication (red LED)
 void update_load_indication(uint d[], uint size)
 {
 	CLEAR_LED_RED;
@@ -146,12 +125,13 @@ void update_load_indication(uint d[], uint size)
 		if (d[i] == HIGH)
 		{
 			led_write(LED_RED, led_no, HIGH);
-			led_write(LED_GREEN, led_no, LOW);
+			led_write(LED_GREEN, led_no, LOW);	// Insurance
 		}
 		led_no = led_no << 1;
 	}
 }
 
+// Updates array with switches input
 void update_switch_data(uint d[], uint size)
 {
 	uint switch_no = SWITCH_0;
@@ -162,17 +142,6 @@ void update_switch_data(uint d[], uint size)
 		switch_no = switch_no << 1;
 	}
 }
-
-//void update_switch_data_off_only(uint d[], uint size)
-//{
-//	uint switch_no = SWITCH_0;
-//
-//	for (uint i = 0; i < size; i++)
-//	{
-//		d[i] = check_switch(switch_no);
-//		switch_no = switch_no << 1;
-//	}
-//}
 
 // Calculates and returns the next load position to be shed from
 // load data (aka get next highest priority that is loaded)
@@ -224,4 +193,27 @@ int8_t get_last_load_pos(const uint d[], const uint a[], const uint s[], const u
 		i++;
 	}
 	return j;
+}
+
+/* Intended for loading switch_data into load_data
+ * - ld = load_data
+ * - sd = switch_data
+ * - off_only (boolean) = flag to limit sharing of infomation where
+ * 	 the switch can only disconnect load during load management
+ */
+void set_array_equal(uint* ld, const uint* sd, const uint size, const uint off_only)
+{
+	if (off_only)
+	{
+		for (uint i = 0; i <= size; i++)
+		{
+			if (sd[i] == LOW)
+				ld[i] = sd[i];
+		}
+	} else {
+		for (uint i = 0; i <= size; i++)
+		{
+			ld[i] = sd[i];
+		}
+	}
 }
