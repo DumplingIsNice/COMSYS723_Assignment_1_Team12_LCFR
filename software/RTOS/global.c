@@ -7,11 +7,16 @@
 
 #include "global.h"
 
-uint* get_load_data()
-{
-	// Needs sema? handle_switch and handle_load should be interleaved...
-	return load_data;
-}
+//uint* get_load_data()
+//{
+//	// Needs sema? handle_switch and handle_load should be interleaved...
+//	return load_data;
+//}
+//
+//uint* get_switch_data()
+//{
+//	return switch_data;
+//}
 
 void set_global_threshold_freq(double threshold)
 {

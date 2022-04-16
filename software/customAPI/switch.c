@@ -26,11 +26,11 @@ uint check_switch(uint switch_pos)
 		switch ((switch_value & switch_pos))
 		{
 			case LOW:
-				led_write(LED_RED, switch_pos, LOW);
+//				led_write(LED_RED, switch_pos, LOW);
 				switch_status = LOW;
 				break;
 			default:
-				led_write(LED_RED, switch_pos, HIGH);
+//				led_write(LED_RED, switch_pos, HIGH);
 				switch_status = HIGH;
 				break;
 		}
@@ -41,17 +41,19 @@ uint check_switch(uint switch_pos)
 void handle_switches()
 {
 	printf("handle_switches running\n");
+	char sys_status;
 	while (TRUE)
 	{
-		if (get_global_sys_status() == NORMAL)
-		{
-			// Perform free load control
-			shed_load(get_load_data(), NO_OF_LOADS);
-		} else {
-			// Perform limited (off) load control
-			// For green and red!
-			;
-		}
+//		sys_status = get_global_sys_status();
+//
+//		if (get_global_sys_status() == NORMAL)
+//		{
+//			// Perform free load control
+//			shed_load(get_load_data(), NO_OF_LOADS);
+//		} else {
+//			// Perform limited (off) load control
+//			// In handle_load task!
+//		}
 		vTaskDelay(50);
 	}
 }

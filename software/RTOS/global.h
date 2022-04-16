@@ -43,13 +43,11 @@ static char global_system_status = NORMAL;
 static double global_threshold_freq = DEFAULT_FREQ_THRESHOLD;
 static double global_threshold_roc = DEFAULT_ROC_THRESHOLD;
 
-// "LED Load" data
-static uint load_data[NO_OF_LOADS] = {0};
-
 /* Function Declaration */
 
 // Getter and Setters
 uint* get_load_data();
+uint* get_switch_data();
 
 void set_global_threshold_freq(double threshold);
 void set_global_threshold_roc(double threshold);
