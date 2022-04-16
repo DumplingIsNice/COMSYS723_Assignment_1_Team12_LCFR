@@ -30,6 +30,7 @@ void verification_timer_callback(TimerHandle_t xTimer)
 void verification_timer_start()
 {
 	verification_timer_elapsed = FALSE;
+	verification_timer_reset();
 	xTimerStart(ver_timer, 0);
 }
 

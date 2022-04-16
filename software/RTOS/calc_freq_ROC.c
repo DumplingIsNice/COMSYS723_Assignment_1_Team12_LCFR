@@ -136,6 +136,8 @@ uint is_threshold_exceeded()
  */
 void threshold_monitor(const double current_freq, const double current_roc)
 {
+	static char past_sys_status;
+	past_sys_status = get_global_sys_status();
 	if (is_verification_elapsed() && get_global_sys_status() != MAINTAIN)
 	{
 		if (current_freq > get_global_threshold_freq() || abs(current_roc) > fabs(get_global_threshold_roc()))
@@ -149,13 +151,23 @@ void threshold_monitor(const double current_freq, const double current_roc)
 			printf("threshold abs: %f\n", fabs(get_global_threshold_roc()));
 #endif
 
-			// Should enable handle_load task to progress
+			// Logic should:
+			// Become the first entry conditon to load managing
+			// Expected to always shed at least one load
 			set_global_sys_status(UNSTABLE);
-			threshold_exceeded = TRUE;
 		} else {
-			// Should prevent handle_load task to progress
-			set_global_sys_status(STABLE);
-			threshold_exceeded = FALSE;
+			// Logic should:
+			// Maintain normal monitoring if in normal or maintain
+			// Enter load managing stable when already in managing state
+			if (past_sys_status == UNSTABLE)
+				set_global_sys_status(STABLE);
 		}
+	}
+	if (past_sys_status != get_global_sys_status())
+	{
+		// Control of timer start/stop in handle_load task
+		// If timer is already running, simply reset
+		// If timer is not running, reset anyways
+		verification_timer_reset();
 	}
 }

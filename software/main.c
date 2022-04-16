@@ -31,6 +31,7 @@
 
 int main()
 {
+	led_init();
 	buttons_init();
 
 	verification_timer_init();

@@ -7,19 +7,43 @@
 
 #include "handle_load.h"
 
+extern uint load_data[];
+
 // Task to handle all automatic load shedding
 void handle_load_auto()
 {
 	printf("handle_load_auto running\n");
+	char sys_status;
 	while (TRUE)
 	{
-		if (is_threshold_exceeded() && is_verification_elapsed()
-			&& get_global_sys_status() != MAINTAIN)
+		sys_status = get_global_sys_status();
+		if (is_verification_elapsed())
 		{
-//			printf("Handling Load!!!\n");
-			verification_timer_start();
-			shed_load();
+			if (sys_status == UNSTABLE)
+			{
+	//			printf("Handling Load!!!\n");
+				shed_load(get_load_data(), NO_OF_LOADS);
+				verification_timer_start();
+			} else if (sys_status == STABLE) {
+				connect_load(get_load_data(), NO_OF_LOADS);
+				verification_timer_start();
+			}
 		}
+
+//			if (is_verification_elapsed()
+//				&& (sys_status == UNSTABLE
+//					|| sys_status == STABLE))
+//			{
+//				if (sys_status == UNSTABLE)
+//				{
+//		//			printf("Handling Load!!!\n");
+//					shed_load(get_load_data(), NO_OF_LOADS);
+//					verification_timer_start();
+//				} else if (sys_status == STABLE){
+//					connect_load(get_load_data(), NO_OF_LOADS);
+//					verification_timer_start();
+//				}
+//			}
 		vTaskDelay(30);
 	}
 }
@@ -29,27 +53,41 @@ void handle_load_auto()
  * - Performs only one round of load shedding per call
  *   (shed up to one load per call)
  */
-void shed_load()
+void shed_load(uint d[], uint size)
 {
-	// "LED Load" data
-	static uint d[NO_OF_LOADS] = {0};
-
-	uint next_load = 0;
+	int8_t load_index = 0;
 	char sys_status = get_global_sys_status();
 
 	// If not unstable, perform normal load shedding
 	// Otherwise, perform critical load shedding!
-	if (sys_status != UNSTABLE)
+	if (sys_status == NORMAL)
 	{
 		update_switch_data(d, NO_OF_LOADS);
 		update_load_indication(d, NO_OF_LOADS);
 	} else {
-		next_load = get_next_load_pos(d, NO_OF_LOADS);
-		if (next_load >= 0)
+
+		load_index = get_next_load_pos(d, NO_OF_LOADS);
+		if (load_index >= 0)
 		{
-			d[next_load] = LOW;
-			led_write(LED_RED, (1 << next_load), LOW);
+			d[load_index] = LOW;
+			led_write(LED_RED, (1 << load_index), LOW);
+//				led_write(LED_GREEN, (1 << load_index), HIGH);
 		}
+	}
+}
+
+void connect_load(uint d[], uint size)
+{
+	int load_index = get_last_load_pos(d, NO_OF_LOADS);
+	if (load_index >= 0)
+	{
+		printf("Connect Load called for index %d\n", load_index);
+		d[load_index] = HIGH;
+		led_write(LED_RED, (1 << load_index), HIGH);
+//				led_write(LED_GREEN, (1 << load_index), LOW);
+	} else {
+		set_global_sys_status(NORMAL);
+		return;
 	}
 }
 
@@ -80,9 +118,9 @@ void update_switch_data(uint d[], uint size)
 	}
 }
 
-// Calculates and returns the next load to be shed from
-// load data
-uint get_next_load_pos(const uint d[], uint size)
+// Calculates and returns the next load position to be shed from
+// load data (aka get next highest priority that is loaded)
+int8_t get_next_load_pos(const uint d[], const uint size)
 {
 	uint next_pos = -1;
 
@@ -96,4 +134,23 @@ uint get_next_load_pos(const uint d[], uint size)
 	}
 
 	return next_pos;
+}
+
+// Calculates and returns the last load position to be shed from
+// load data (aka get next lowest priority that is loaded)
+int8_t get_last_load_pos(const uint d[], const uint size)
+{
+	uint i = 0;
+	uint j = size-1-i;
+	while (i <= size)
+	{
+		j = size-1-i;
+//		printf("Looping through d[%d] = %d\n", j, d[j]);
+		if (d[j] == LOW)
+		{
+			return j;
+		}
+		i++;
+	}
+	return j;
 }

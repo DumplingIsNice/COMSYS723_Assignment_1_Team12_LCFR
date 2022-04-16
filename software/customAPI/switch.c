@@ -43,10 +43,10 @@ void handle_switches()
 	printf("handle_switches running\n");
 	while (TRUE)
 	{
-		if (get_global_sys_status() != UNSTABLE)
+		if (get_global_sys_status() == NORMAL)
 		{
 			// Perform free load control
-			shed_load();
+			shed_load(get_load_data(), NO_OF_LOADS);
 		} else {
 			// Perform limited (off) load control
 			;

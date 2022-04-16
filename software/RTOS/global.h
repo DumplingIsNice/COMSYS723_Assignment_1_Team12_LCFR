@@ -20,20 +20,29 @@
 #define DEFAULT_ROC_THRESHOLD 8
 
 // System Status Mux
+#define NORMAL 		'N'
 #define STABLE 		'S'
 #define UNSTABLE 	'U'
 #define MAINTAIN 	'M'
 
 // System Status String
+
+// Monitoring
+#define SYS_STAT_NORMAL		"Normal"
+// Load managing
 #define SYS_STAT_STABLE 	"Stable"
 #define SYS_STAT_UNSTABLE 	"Unstable"
 #define SYS_STAT_MAINTAIN 	"Maintenance"
 
 #define SYS_STATUS_SIZE 20
 
+// Load Data
+#define NO_OF_LOADS 5
+
 /* Function Declaration */
 
 // Getter and Setters
+uint* get_load_data();
 
 void set_global_threshold_freq(double threshold);
 void set_global_threshold_roc(double threshold);

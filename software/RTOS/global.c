@@ -7,9 +7,18 @@
 
 #include "global.h"
 
-static char global_system_status = STABLE;
+static char global_system_status = NORMAL;
 static double global_threshold_freq = DEFAULT_FREQ_THRESHOLD;
 static double global_threshold_roc = DEFAULT_ROC_THRESHOLD;
+
+// "LED Load" data
+static uint load_data[NO_OF_LOADS] = {0};
+
+uint* get_load_data()
+{
+	// Needs sema? handle_switch and handle_load should be interleaved...
+	return load_data;
+}
 
 void set_global_threshold_freq(double threshold)
 {
@@ -30,23 +39,23 @@ double get_global_threshold_roc()
 
 void toggle_global_maintainence()
 {
-	static char last_status = STABLE;
+	static char last_status = NORMAL;
 
 	switch (global_system_status)
 	{
-	case STABLE:
-		last_status = global_system_status;
-		global_system_status = MAINTAIN;
-		break;
-	case UNSTABLE:
-		last_status = global_system_status;
-		global_system_status = MAINTAIN;
-		break;
+//	case STABLE:
+//		last_status = global_system_status;
+//		global_system_status = MAINTAIN;
+//		break;
+//	case UNSTABLE:
+//
+//		break;
 	case MAINTAIN:
 		global_system_status = last_status;
 		break;
 	default:
-		;
+		last_status = global_system_status;
+		global_system_status = MAINTAIN;
 	}
 
 }
@@ -84,6 +93,9 @@ void get_string_global_sys_status(char *local_buf)
 {
 	switch (global_system_status)
 	{
+	case NORMAL:
+		strcpy(local_buf, SYS_STAT_NORMAL);
+		break;
 	case STABLE:
 		strcpy(local_buf, SYS_STAT_STABLE);
 		break;
