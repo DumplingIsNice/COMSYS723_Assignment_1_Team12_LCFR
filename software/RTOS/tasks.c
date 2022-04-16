@@ -68,14 +68,6 @@ int init_create_tasks(void)
 			NULL);
 
 	xTaskCreate(
-			handle_switches,
-			"handle_switches",
-			TASK_STACKSIZE,
-			NULL,
-			HANDLE_SWITCHES_PRIORITY,
-			NULL);
-
-	xTaskCreate(
 			handle_load_auto,
 			"handle_load_auto",
 			TASK_STACKSIZE,

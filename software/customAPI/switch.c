@@ -37,25 +37,4 @@ uint check_switch(uint switch_pos)
 	return switch_status;
 }
 
-// Task to handle all manual load shedding
-void handle_switches()
-{
-	printf("handle_switches running\n");
-	char sys_status;
-	while (TRUE)
-	{
-//		sys_status = get_global_sys_status();
-//
-//		if (get_global_sys_status() == NORMAL)
-//		{
-//			// Perform free load control
-//			shed_load(get_load_data(), NO_OF_LOADS);
-//		} else {
-//			// Perform limited (off) load control
-//			// In handle_load task!
-//		}
-		vTaskDelay(50);
-	}
-}
-
 
