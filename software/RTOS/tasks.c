@@ -18,8 +18,8 @@ int init_OS_data_structs(void)
 
 	Q_response_time = xQueueCreate(FREQ_RESPONSE_QUEUE_SIZE, sizeof(unsigned int));
 	response_time_sem = xSemaphoreCreateMutex();
-	response_timer_binary_1_sem = xSemaphoreCreateBinary();
-	response_timer_binary_2_sem = xSemaphoreCreateBinary();
+	response_timer_end_gate_sem = xSemaphoreCreateBinary();
+	response_timer_start_gate_sem = xSemaphoreCreateBinary();
 
 	Q_roc_calc_values = xQueueCreate(ROC_DATA_QUEUE_SIZE, sizeof(double));
 	roc_queue_sem = xSemaphoreCreateMutex();

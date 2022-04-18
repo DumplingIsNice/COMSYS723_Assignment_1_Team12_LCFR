@@ -82,7 +82,7 @@ void shed_load(uint d[], uint a[], uint size)
 
 #ifdef MOCK_RESPONSE
 
-		xSemaphoreTake(response_timer_binary_1_sem, portMAX_DELAY);
+		xSemaphoreTake(response_timer_end_gate_sem, portMAX_DELAY);
 		response_timer_end();
 
         uint time = calc_response_time();
@@ -94,7 +94,7 @@ void shed_load(uint d[], uint a[], uint size)
 		} else {
 			printf("response_time_sem Semaphore cannot be taken!\n");
 		}
-        xSemaphoreGive(response_timer_binary_2_sem);
+        xSemaphoreGive(response_timer_start_gate_sem);
 #endif
 	}
 }

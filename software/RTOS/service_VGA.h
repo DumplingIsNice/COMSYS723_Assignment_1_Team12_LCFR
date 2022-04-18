@@ -52,8 +52,8 @@ typedef struct{
 
 // Definition of Semaphores
 SemaphoreHandle_t response_time_sem;
-SemaphoreHandle_t response_timer_binary_1_sem;
-SemaphoreHandle_t response_timer_binary_2_sem;
+SemaphoreHandle_t response_timer_end_gate_sem;
+SemaphoreHandle_t response_timer_start_gate_sem;
 
 // QueueHandles
 QueueHandle_t Q_response_time;
@@ -68,7 +68,7 @@ void service_VGA();
  */
 void empty_queue(char mux, double* local_vals, uint* n);
 // Same as empty queue, but fixed for response time
-void empty_response_queue(uint* local_vals);
+void empty_response_queue(uint local_vals[]);
 
 // Calculates highlight response values to be displayed from local buffer
 void calc_response_values(const uint response_time_vals[], uint* max, uint* min, uint* avg);

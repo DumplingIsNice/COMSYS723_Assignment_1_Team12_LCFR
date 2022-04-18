@@ -298,7 +298,7 @@ void empty_queue(char mux, double local_vals[], uint* iterator)
 }
 
 // Same as empty queue, but fixed for response time
-void empty_response_queue(uint* local_vals)
+void empty_response_queue(uint local_vals[])
 {
 	uint data = 0;
 	uint i = 0;

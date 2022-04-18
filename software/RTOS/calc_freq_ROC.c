@@ -11,8 +11,8 @@ void freq_relay()
 {
 
 #ifdef MOCK_RESPONSE
-	xSemaphoreTakeFromISR(response_timer_binary_2_sem, portMAX_DELAY);
-	xSemaphoreGiveFromISR(response_timer_binary_1_sem, portMAX_DELAY);
+	xSemaphoreTakeFromISR(response_timer_start_gate_sem, portMAX_DELAY);
+	xSemaphoreGiveFromISR(response_timer_end_gate_sem, portMAX_DELAY);
 	response_timer_start();
 #endif
 
