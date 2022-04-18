@@ -53,9 +53,9 @@ void service_VGA()
 
 	uint sys_up_time = 5;
 
-	uint response_max = 1;
-	uint response_min = 2;
-	uint response_avg = 3;
+	uint response_max = 0;
+	uint response_min = 99999;
+	uint response_avg = 0;
 
 	Line line_freq, line_ROC;
 
@@ -316,17 +316,18 @@ void empty_response_queue(uint* local_vals)
 }
 
 // Calculates highlight response values to be displayed from local buffer
-void calc_response_values(const uint* response_time_vals, uint* max, uint* min, uint* avg)
+void calc_response_values(const uint response_time_vals[], uint* max, uint* min, uint* avg)
 {
 	uint sum = 0;
 	uint val = 0;
-	uint no_items = 0;
+	uint no_items = 1;
 
 	for (uint i = 0; i < RESPONSE_TIME_BUF_SIZE; i++)
 	{
 		val = response_time_vals[i];
 		(*max) = val > (*max) ? val : (*max);
-		(*min) = val < (*min) ? val : (*min);
+		if (val != 0)
+			(*min) = val < (*min) ? val : (*min);
 
 		if (val != 0)
 		{

@@ -18,7 +18,7 @@
 /* Primary Functions */
 
 // Task to handle all automatic load shedding
-void handle_load_auto();
+void handle_load();
 
 /* Self-contained logic of load shedding
  * - Controlled/depends on system state

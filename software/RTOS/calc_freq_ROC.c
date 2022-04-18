@@ -9,6 +9,13 @@
 
 void freq_relay()
 {
+
+#ifdef MOCK_RESPONSE
+	xSemaphoreTakeFromISR(response_timer_binary_2_sem, portMAX_DELAY);
+	xSemaphoreGiveFromISR(response_timer_binary_1_sem, portMAX_DELAY);
+	response_timer_start();
+#endif
+
 	uint temp = IORD(FREQUENCY_ANALYSER_BASE, 0);
 //	printf("%f Hz\n", 16000/(double)temp);
     xQueueSendToBackFromISR(Q_ADC_sample_values, (void*) &temp, portMAX_DELAY);
@@ -92,22 +99,6 @@ void calc_freq_ROC()
 
         flag_first_run = TRUE;
 
-        /* Mock Response time Section */
-#ifdef MOCK_RESPONSE
-        response_timer_start();
-//        vTaskDelay(1000);
-        response_timer_end();
-        uint time = 2;// calc_response_time();
-
-        if (xSemaphoreTake(response_time_sem, portMAX_DELAY) == pdTRUE)
-		{
-//			printf("Task is delayed: %u ms\n", time);
-			xQueueSendToBack(Q_response_time, &time, portMAX_DELAY);
-			xSemaphoreGive(response_time_sem);
-		} else {
-			printf("response_time_sem Semaphore cannot be taken!\n");
-		}
-#endif
 #ifdef PRINT_CALC_VAL
         printf("#########################\n");
 #endif

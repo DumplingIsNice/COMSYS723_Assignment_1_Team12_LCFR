@@ -8,7 +8,7 @@
 #include "handle_load.h"
 
 // Task to handle all load shedding
-void handle_load_auto()
+void handle_load()
 {
 	printf("handle_load_auto running\n");
 	char sys_status;
@@ -74,8 +74,28 @@ void shed_load(uint d[], uint a[], uint size)
 	{
 		d[load_index] = LOW;
 		a[load_index] = HIGH;
+
 		led_write(LED_RED, (1 << load_index), LOW);
 		led_write(LED_GREEN, (1 << load_index), HIGH);
+
+		/* Response timing Section */
+
+#ifdef MOCK_RESPONSE
+
+		xSemaphoreTake(response_timer_binary_1_sem, portMAX_DELAY);
+		response_timer_end();
+
+        uint time = calc_response_time();
+
+        if (xSemaphoreTake(response_time_sem, portMAX_DELAY) == pdTRUE)
+		{
+			xQueueSendToBack(Q_response_time, &time, portMAX_DELAY);
+			xSemaphoreGive(response_time_sem);
+		} else {
+			printf("response_time_sem Semaphore cannot be taken!\n");
+		}
+        xSemaphoreGive(response_timer_binary_2_sem);
+#endif
 	}
 }
 
@@ -85,7 +105,7 @@ void connect_load(uint d[], uint a[], const uint s[], const uint size)
 	if (load_index >= 0)
 	{
 		// Note: Don't write high if switch position is off!!!
-		printf("Connect Load called for index %d\n", load_index);
+//		printf("Connect Load called for index %d\n", load_index);
 		d[load_index] = HIGH;
 		a[load_index] = LOW;
 		led_write(LED_RED, (1 << load_index), HIGH);
@@ -184,8 +204,8 @@ int8_t get_last_load_pos(const uint d[], const uint a[], const uint s[], const u
 	while (i <= size)
 	{
 		j = size-1-i;
-		printf("switch s[%d] is %d\n", i, s[i]);
-		printf("Looping through d[%d] = %d\n", j, d[j]);
+//		printf("switch s[%d] is %d\n", i, s[i]);
+//		printf("Looping through d[%d] = %d\n", j, d[j]);
 		if (d[j] == LOW && a[j] == HIGH)
 		{
 			return j;

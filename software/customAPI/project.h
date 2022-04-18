@@ -75,7 +75,7 @@
 
 #define RESET   0
 
-#define DEBUG
+//#define DEBUG
 
 // Mock Debugging Defined
 // Enable, disable dummy response timing functionality

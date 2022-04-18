@@ -29,14 +29,18 @@ void response_timer_init()
 // Calculates and returns the measured time in ms
 uint calc_response_time()
 {
-	uint t = (unsigned int)((timestamp_end_time - timestamp_start_time) - timestamp_overhead_time);
-	t = (unsigned int) (t*timestamp_factor_ms);
+//	printf("Timestamp Start: %u ticks\n", timestamp_start_time);
+//	printf("Timestamp End: %u ticks\n", timestamp_end_time);
+	uint t = (uint)((timestamp_end_time - timestamp_start_time) - timestamp_overhead_time);
+	t = (uint) (t*timestamp_factor_ms);
+	printf("Response Time: %u ms\n", t);
 	xQueueSendToBack(Q_response_time, (void*) &t, portMAX_DELAY);
 	return t;
 }
 
 void response_timer_start()
 {
+	alt_timestamp_start();
 	timestamp_start_time = alt_timestamp();
 }
 
