@@ -56,11 +56,16 @@
 #include "../freertos/task.h"
 #include "../freertos/queue.h"
 #include "../freertos/semphr.h"
+#include "../freertos/timers.h"
 
 #include "../RTOS/tasks.h"
 #include "../RTOS/handle_keyboard.h"
 #include "../RTOS/calc_freq_ROC.h"
 #include "../RTOS/service_VGA.h"
+#include "../RTOS/handle_load.h"
+
+// Software timers
+#include "verification_timer.h"
 
 // Common macros
 #define HIGH 	1
@@ -68,9 +73,9 @@
 #define TRUE	1
 #define FALSE	0
 
-#define RESET 0
+#define RESET   0
 
-#define DEBUG
+//#define DEBUG
 
 // Mock Debugging Defined
 // Enable, disable dummy response timing functionality

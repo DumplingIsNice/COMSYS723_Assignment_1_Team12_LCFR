@@ -17,6 +17,9 @@ void buttons_interrupt_function(void* context, alt_u32 id)
 	if(*temp == BUTTON_3)
 		toggle_global_maintainence();
 
+	if(*temp == BUTTON_2)
+		set_global_sys_status_from_ISR(UNSTABLE);
+
 	// clears the edge capture register
 	CLR_BUTTONS_EDGE;
 }
@@ -34,8 +37,6 @@ alt_u32* buttons_init()
 
 	// register the ISR, CONTEXT IS THE PASSED POINTER ARGUMENT
 	alt_irq_register(PUSH_BUTTON_IRQ, (void*)p_flag_btn, buttons_interrupt_function);
-
-	CLEAR_LED_GREEN;
 
 	return p_flag_btn;
 }

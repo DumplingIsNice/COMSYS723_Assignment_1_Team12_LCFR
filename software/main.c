@@ -31,7 +31,10 @@
 
 int main()
 {
+	led_init();
 	buttons_init();
+
+	verification_timer_init();
 
 	response_timer_init();
 	ps2_keyboard_init();

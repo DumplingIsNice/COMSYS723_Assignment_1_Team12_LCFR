@@ -41,7 +41,7 @@ typedef struct{
 #define ROC_DATA_QUEUE_SIZE 		1000
 
 // Local buffers
-#define RESPONSE_TIME_BUF_SIZE		20
+#define RESPONSE_TIME_BUF_SIZE		100
 #define FREQ_DATA_BUF_SIZE			100
 #define ROC_DATA_BUF_SIZE			100
 
@@ -52,6 +52,8 @@ typedef struct{
 
 // Definition of Semaphores
 SemaphoreHandle_t response_time_sem;
+SemaphoreHandle_t response_timer_end_gate_sem;
+SemaphoreHandle_t response_timer_start_gate_sem;
 
 // QueueHandles
 QueueHandle_t Q_response_time;
@@ -66,9 +68,9 @@ void service_VGA();
  */
 void empty_queue(char mux, double* local_vals, uint* n);
 // Same as empty queue, but fixed for response time
-void empty_response_queue(uint* local_vals);
+void empty_response_queue(uint local_vals[]);
 
 // Calculates highlight response values to be displayed from local buffer
-void calc_response_values(const uint* response_time_vals, uint* max, uint* min, uint* avg);
+void calc_response_values(const uint response_time_vals[], uint* max, uint* min, uint* avg);
 
 #endif /* RTOS_SERVICE_VGA_H_ */

@@ -105,13 +105,11 @@ void handle_keyboard()
 					mode = NO_COMMAND;
 					handle_threshold_string_input(logged_string, FREQ_COMMAND);
 					strcpy(logged_string, "");
-					led_write(LED_GREEN, LED_0, LOW);
 					break;
 				case RATE_COMMAND:
 					mode = NO_COMMAND;
 					handle_threshold_string_input(logged_string, RATE_COMMAND);
 					strcpy(logged_string, "");
-					led_write(LED_GREEN, LED_1, LOW);
 					break;
 				default:
 					strcat(logged_string, received_string);
@@ -145,11 +143,9 @@ char check_command(char *string)
 	if (!strcmpi(string, FREQ_STRING))
 	{
 		mode = FREQ_COMMAND;
-		led_write(LED_GREEN, LED_0, HIGH);
 	} else if (!strcmpi(string, RATE_STRING))
 	{
 		mode = RATE_COMMAND;
-		led_write(LED_GREEN, LED_1, HIGH);
 	}
 	return mode;
 }

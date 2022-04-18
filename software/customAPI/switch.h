@@ -10,11 +10,6 @@
 
 #include "project.h"
 
-typedef struct load_data
-{
-	uint load_num;
-} load_data;
-
 // Switches Binary Positions
 #define SWITCH_0	(1 << 0)
 #define SWITCH_1	(1 << 1)
@@ -29,12 +24,8 @@ typedef struct load_data
 // Nios II Switchs API Macros
 #define GET_SWITCHES IORD_ALTERA_AVALON_PIO_DATA(SLIDE_SWITCH_BASE)
 
-// Handles the switching between two modes based on the switch position
-	/*
-	 * Inputs:
-	 * load data package
-	 */
-void handle_switches(load_data* p_data);
+// Task to handle all manual load shedding
+void handle_switches();
 
 // Checks the status of a switch at position and return status
 	/* Inputs:

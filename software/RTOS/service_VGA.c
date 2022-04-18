@@ -53,9 +53,9 @@ void service_VGA()
 
 	uint sys_up_time = 5;
 
-	uint response_max = 1;
-	uint response_min = 2;
-	uint response_avg = 3;
+	uint response_max = 0;
+	uint response_min = 99999;
+	uint response_avg = 0;
 
 	Line line_freq, line_ROC;
 
@@ -70,7 +70,7 @@ void service_VGA()
 		threshold_freq = get_global_threshold_freq();
 		threshold_roc = get_global_threshold_roc();
 
-		get_global_sys_status(sys_status);
+		get_string_global_sys_status(sys_status);
 
 		// Empties Freq data queue
 		if (uxQueueMessagesWaiting(Q_freq_calc_values) != 0)
@@ -258,7 +258,7 @@ void service_VGA()
 									 roc_vals[m_4]);
 		alt_up_char_buffer_string(char_buf, (char*)VGA_print_buffer, 0, i+=2);
 
-		vTaskDelay(15);
+		vTaskDelay(10);
 	}
 }
 
@@ -298,7 +298,7 @@ void empty_queue(char mux, double local_vals[], uint* iterator)
 }
 
 // Same as empty queue, but fixed for response time
-void empty_response_queue(uint* local_vals)
+void empty_response_queue(uint local_vals[])
 {
 	uint data = 0;
 	uint i = 0;
@@ -316,17 +316,18 @@ void empty_response_queue(uint* local_vals)
 }
 
 // Calculates highlight response values to be displayed from local buffer
-void calc_response_values(const uint* response_time_vals, uint* max, uint* min, uint* avg)
+void calc_response_values(const uint response_time_vals[], uint* max, uint* min, uint* avg)
 {
 	uint sum = 0;
 	uint val = 0;
-	uint no_items = 0;
+	uint no_items = 1;
 
 	for (uint i = 0; i < RESPONSE_TIME_BUF_SIZE; i++)
 	{
 		val = response_time_vals[i];
 		(*max) = val > (*max) ? val : (*max);
-		(*min) = val < (*min) ? val : (*min);
+		if (val != 0)
+			(*min) = val < (*min) ? val : (*min);
 
 		if (val != 0)
 		{

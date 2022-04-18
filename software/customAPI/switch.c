@@ -7,11 +7,6 @@
 
 #include "switch.h"
 
-void handle_switches(load_data* p_data)
-{
-	;
-}
-
 // Checks the status of a switch at position and return status
 	/* Inputs:
 	 * Switch position macro
@@ -31,16 +26,15 @@ uint check_switch(uint switch_pos)
 		switch ((switch_value & switch_pos))
 		{
 			case LOW:
-				led_write(LED_RED, switch_pos, LOW);
+//				led_write(LED_RED, switch_pos, LOW);
 				switch_status = LOW;
 				break;
 			default:
-				led_write(LED_RED, switch_pos, HIGH);
+//				led_write(LED_RED, switch_pos, HIGH);
 				switch_status = HIGH;
 				break;
 		}
 	return switch_status;
 }
-
 
 
