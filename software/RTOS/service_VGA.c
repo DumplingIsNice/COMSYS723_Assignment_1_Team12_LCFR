@@ -9,6 +9,8 @@
 
 void service_VGA()
 {
+	/* Intialise Buffers */
+
 	alt_up_char_buffer_dev *char_buf;
 	alt_up_pixel_buffer_dma_dev *pixel_buf;
 
@@ -26,13 +28,16 @@ void service_VGA()
 		printf("can't find char buffer device\n");
 	}
 
+	// Reset the display
 	alt_up_char_buffer_clear(char_buf);
+
 	printf("VGA Controllers initialised!\n");
 
 	printf("service_VGA Running\n");
 
 	static uint service_VGA_counter = 0;
 
+	// Reused for VGA Display
 	char VGA_print_buffer[100] = "";
 
 	// Local Buffers to hold value for display
@@ -48,10 +53,10 @@ void service_VGA()
 
 	// Local Variables
 	char sys_status[SYS_STATUS_SIZE] = SYS_STAT_STABLE;
-	double threshold_freq = 12.2;
-	double threshold_roc = 12.3;
+	double threshold_freq = DEFAULT_FREQ_THRESHOLD;
+	double threshold_roc = DEFAULT_ROC_THRESHOLD;
 
-	uint sys_up_time = 5;
+	uint sys_up_time = 0;
 
 	uint response_max = 0;
 	uint response_min = 99999;
@@ -228,6 +233,9 @@ void service_VGA()
 		// Problem is n & m actually does not index the current value...
 		// the iterator is incremented in empy_queue...
 		// But no, this is EXACTLY the LATEST VALUES! (per service_VGA update)
+
+		// Handling display iteration when snapshot of five most recent values reaches
+		// end of buffer
 		uint n_1, n_2, n_3, n_4;
 		n_1 = (n-1)>99 ? 99 : n-1;
 		n_2 = (n-2)>99 ? 98 : n-2;

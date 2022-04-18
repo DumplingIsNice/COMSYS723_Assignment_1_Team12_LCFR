@@ -58,7 +58,7 @@ int init_create_tasks(void)
 			"calc_freq_ROC",
 			TASK_STACKSIZE,
 			NULL,
-			HANDLE_KEYBOARD_PRIORITY,
+			CALC_FREQ_ROC_PRIORITY,
 			NULL);
 
 	xTaskCreate(
@@ -71,7 +71,7 @@ int init_create_tasks(void)
 
 	xTaskCreate(
 			handle_load,
-			"handle_load_auto",
+			"handle_load",
 			TASK_STACKSIZE,
 			NULL,
 			HANDLE_LOAD_PRIORITY,

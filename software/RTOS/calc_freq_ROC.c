@@ -7,6 +7,7 @@
 
 #include "calc_freq_ROC.h"
 
+// ISR
 void freq_relay()
 {
 
@@ -105,13 +106,6 @@ void calc_freq_ROC()
 
         threshold_monitor(new_freq_value, freq_ROC_value);
 	}
-}
-
-static uint threshold_exceeded = FALSE;
-
-uint is_threshold_exceeded()
-{
-	return threshold_exceeded;
 }
 
 /* Checks the most recent values of freq and roc against threshold

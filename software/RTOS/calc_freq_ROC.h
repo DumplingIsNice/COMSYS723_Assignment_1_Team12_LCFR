@@ -34,8 +34,6 @@ void calc_freq_ROC();
 
 /* Threshold Functions */
 
-uint is_threshold_exceeded();
-
 /* Checks the most recent values of freq and roc against threshold
  * Then updates threshold exceeded flag.
  * Note: This is also the top-most level (gatekeeping) of unstable
