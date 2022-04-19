@@ -56,7 +56,7 @@ void service_VGA()
 	double threshold_freq = DEFAULT_FREQ_THRESHOLD;
 	double threshold_roc = DEFAULT_ROC_THRESHOLD;
 
-	uint sys_up_time = 0;
+	char* sys_up_time = NULL;
 
 	uint response_max = 0;
 	uint response_min = 99999;
@@ -76,6 +76,8 @@ void service_VGA()
 		threshold_roc = get_global_threshold_roc();
 
 		get_string_global_sys_status(sys_status);
+
+		sys_up_time = boot_timing();
 
 		// Empties Freq data queue
 		if (uxQueueMessagesWaiting(Q_freq_calc_values) != 0)
@@ -195,8 +197,11 @@ void service_VGA()
 		i = 2;
 		j = 0;
 
+		// Depreciated code
 		sprintf(VGA_print_buffer, "service_VGA Running Counter: %d", service_VGA_counter++);
 			alt_up_char_buffer_string(char_buf, (char*)VGA_print_buffer, 0, i+=2);
+
+		i += 2;
 
 		alt_up_char_buffer_string(char_buf, "By:", 0, i+=2);
 		alt_up_char_buffer_string(char_buf, "Hao Lin", 1, i+=2);
@@ -224,8 +229,10 @@ void service_VGA()
 			alt_up_char_buffer_string(char_buf, (char*)VGA_print_buffer, 42, i+=2);
 		sprintf(VGA_print_buffer, "Avg: %d    ", response_avg);
 			alt_up_char_buffer_string(char_buf, (char*)VGA_print_buffer, 42, i+=2);
-		sprintf(VGA_print_buffer, "Total System Up-time: %d    ", sys_up_time);
+
+		sprintf(VGA_print_buffer, "Total System Up-time: %s    ", sys_up_time);
 			alt_up_char_buffer_string(char_buf, (char*)VGA_print_buffer, 40, i+=2);
+		alt_up_char_buffer_string(char_buf, "(days:hours:seconds)", 40, i+=2);
 
 		i = j;
 		i += 2;

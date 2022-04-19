@@ -66,6 +66,7 @@
 
 // Software timers
 #include "verification_timer.h"
+#include "boot_time.h"
 
 // Common macros
 #define HIGH 	1
