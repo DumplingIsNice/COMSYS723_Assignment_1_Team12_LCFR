@@ -74,7 +74,7 @@ void calc_freq_ROC()
         	printf("new_freq_ADC_samples: %d\n", new_freq_ADC_samples);
         	printf("old_freq_ADC_samples: %d\n", old_freq_ADC_samples);
 #endif
-        	freq_ROC_value = (new_freq_value - old_freq_value) * 2.0 * new_freq_value* old_freq_value / (new_freq_value + old_freq_value);
+        	freq_ROC_value = (new_freq_value - old_freq_value) * 2.0 * new_freq_value * old_freq_value / (new_freq_value + old_freq_value);
 
         	if (xSemaphoreTake(roc_queue_sem, portMAX_DELAY) == pdTRUE)
 			{
