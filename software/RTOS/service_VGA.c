@@ -82,13 +82,10 @@ void service_VGA()
 		// Empties Freq data queue
 		if (uxQueueMessagesWaiting(Q_freq_calc_values) != 0)
 		{
-//			printf("!!!!!!!!!!!!Waiting freq_queue_sem!!!!!!!!!!!!\n");
 			if (xSemaphoreTake(freq_queue_sem, portMAX_DELAY) == pdTRUE)
 			{
-//				printf("!!!!!!!!!!!!Emptying FREQ Queue!!!!!!!!!!!!\n");
 				empty_queue(EMPTY_FREQ, freq_vals, n_p);
 				xSemaphoreGive(freq_queue_sem);
-//				printf("!!!!!!!!!!!!Finished Emptying freq_queue_sem!!!!!!!!!!!!\n");
 			} else {
 				printf("freq_queue_sem Semaphore cannot be taken!\n");
 			}
@@ -97,13 +94,10 @@ void service_VGA()
 		// Empties RoC data queue
 		if (uxQueueMessagesWaiting(Q_roc_calc_values) != 0)
 		{
-//			printf("!!!!!!!!!!!!Waiting roc_queue_sem!!!!!!!!!!!!\n");
 			if (xSemaphoreTake(roc_queue_sem, portMAX_DELAY) == pdTRUE)
 			{
-//				printf("!!!!!!!!!!!!Emptying ROC Queue!!!!!!!!!!!!\n");
 				empty_queue(EMPTY_ROC, roc_vals, m_p);
 				xSemaphoreGive(roc_queue_sem);
-//				printf("!!!!!!!!!!!!Finished Emptying roc_queue_sem!!!!!!!!!!!!\n");
 			} else {
 				printf("roc_queue_sem Semaphore cannot be taken!\n");
 			}
@@ -113,13 +107,10 @@ void service_VGA()
 #ifdef MOCK_RESPONSE
 		if (uxQueueMessagesWaiting(Q_response_time) != 0)
 		{
-//			printf("!!!!!!!!!!!!Waiting!!!!!!!!!!!!\n");
 			if (xSemaphoreTake(response_time_sem, portMAX_DELAY) == pdTRUE)
 			{
-//				printf("!!!!!!!!!!!!Emptying Queue!!!!!!!!!!!!\n");
 				empty_response_queue(response_time_vals);
 				xSemaphoreGive(response_time_sem);
-//				printf("!!!!!!!!!!!!Finished Emptying Queue!!!!!!!!!!!!\n");
 			} else {
 				printf("response_time_sem Semaphore cannot be taken!\n");
 			}
@@ -304,10 +295,8 @@ void empty_queue(char mux, double local_vals[], uint* iterator)
 	while(uxQueueMessagesWaiting(Q) != 0)
 	{
 		xQueueReceive(Q, &data, portMAX_DELAY);
-//		printf("Emptied values %d is %f\n", i, data);
 		(*iterator) = ++(*iterator)%100;
 		local_vals[(*iterator)] = data;
-//		printf("Local values %d is %f\n", (*iterator), local_vals[(*iterator)]);
 		i++;
 	}
 }
@@ -322,10 +311,8 @@ void empty_response_queue(uint local_vals[])
 	while(uxQueueMessagesWaiting(Q_response_time) != 0)
 	{
 		xQueueReceive(Q_response_time, &data, portMAX_DELAY);
-//		printf("Emptied values %d is %d\n", i, data);
 		j = ++j%RESPONSE_TIME_BUF_SIZE;
 		local_vals[j] = data;
-//		printf("Local values %d is %d\n", j, local_vals[j]);
 		i++;
 	}
 }
@@ -346,11 +333,9 @@ void calc_response_values(const uint response_time_vals[], uint* max, uint* min,
 
 		if (val != 0)
 		{
-//			printf("i: %d, Response time %d\n", i, val);
 			sum += val;
 			no_items++;
 		}
 	}
 	(*avg) = sum/no_items;
-//	printf("AVG: %d MAX: %d MIN: %d\n", (*avg), (*max), (*min));
 }

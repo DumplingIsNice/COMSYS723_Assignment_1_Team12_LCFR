@@ -78,8 +78,8 @@
 
 //#define DEBUG
 
-// Mock Debugging Defined
-// Enable, disable dummy response timing functionality
+// Debugging Defined
+// Enable, disable response timing functionality
 #define MOCK_RESPONSE
 
 // Prints calculated values in calc_freq_roc

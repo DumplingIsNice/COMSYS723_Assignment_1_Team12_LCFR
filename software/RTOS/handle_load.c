@@ -45,10 +45,6 @@ void handle_load()
 					shed_load(load_data, auto_data, NO_OF_LOADS);
 					verification_timer_start();
 				} else if (sys_status == STABLE) {
-//					for (uint i = 0; i < NO_OF_LOADS; i++)
-//					{
-//						printf("switch_data_p[%d] is %d\n", i, load_data[i]);
-//					}
 					connect_load(load_data, switch_data, auto_data,  NO_OF_LOADS);
 					verification_timer_start();
 				}
@@ -104,8 +100,6 @@ void connect_load(uint d[], uint a[], const uint s[], const uint size)
 	int load_index = get_last_load_pos(d, a, s, NO_OF_LOADS);
 	if (load_index >= 0)
 	{
-		// Note: Don't write high if switch position is off!!!
-//		printf("Connect Load called for index %d\n", load_index);
 		d[load_index] = HIGH;
 		a[load_index] = LOW;
 		led_write(LED_RED, (1 << load_index), HIGH);
@@ -183,18 +177,6 @@ int8_t get_next_load_pos(const uint d[], const uint size)
 // load data (aka get next lowest priority that is loaded)
 int8_t get_last_load_pos(const uint d[], const uint a[], const uint s[], const uint size)
 {
-//	uint last_pos = size-1;
-//	for (int8_t i = size-1; i >= -1; i--)
-//	{
-////		printf("switch s[%d] is %d\n", i, s[i]);
-//		if (d[i] == LOW)
-//		{
-//			last_pos = i;
-//			break;
-//		}
-//	}
-//	return last_pos;
-
 //	/* Note: ANCIENT DEBUGGING FORMAT */
 //	// For an unexplained error
 //	// Change when got time...
@@ -204,8 +186,6 @@ int8_t get_last_load_pos(const uint d[], const uint a[], const uint s[], const u
 	while (i <= size)
 	{
 		j = size-1-i;
-//		printf("switch s[%d] is %d\n", i, s[i]);
-//		printf("Looping through d[%d] = %d\n", j, d[j]);
 		if (d[j] == LOW && a[j] == HIGH)
 		{
 			return j;

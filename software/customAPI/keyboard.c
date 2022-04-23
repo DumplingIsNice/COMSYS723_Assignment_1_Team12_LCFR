@@ -14,7 +14,6 @@ char global_string[GLOBAL_STRING_SIZE] = "";
 // handle_keyboard task
 void ps2_isr (void* context, alt_u32 id)
 {
-	// printf("isr called!\n"); // isr called three times?
 	ps2_read((alt_up_ps2_dev*) context);
 }
 
@@ -32,7 +31,6 @@ void ps2_isr (void* context, alt_u32 id)
 */
 void ps2_read(alt_up_ps2_dev* ps2_device)
 {
-	//printf("Read called\n");
 	char ascii;
 	int status = FALSE;
 	unsigned char key = 0;
@@ -43,17 +41,11 @@ void ps2_read(alt_up_ps2_dev* ps2_device)
 
 	if (status == FALSE)
 	{
-		// printf("Reading\n");
-			// print out the result
+		// print out the result
 		switch (decode_mode)
 		{
 		case KB_ASCII_MAKE_CODE :
 			translate_make_code(KB_ASCII_MAKE_CODE, key, string);
-
-			// printf("Strange!");
-			// Strange behavior where printf() is not called?
-			// Occurred with semaphoreGive.
-			// Solved with a meaningless call before actual calling.
 
 			printf("ASCII   : %s\n", string);
 			printf("Length  : %d\n", strlen(string));

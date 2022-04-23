@@ -41,45 +41,6 @@ alt_u32* buttons_init()
 	return p_flag_btn;
 }
 
-void handle_buttons(void* p_flag_btn)
-{
-	alt_u32* flag_btn = (alt_u32*) p_flag_btn;
-
-	// Flag_pro handles an console glitch
-	// From printing too fast?
-	static uint flag_proc = 0;
-	if(flag_proc)
-	{
-		*flag_btn = 0;
-		flag_proc = 0;
-	}
-
-	if(*flag_btn)
-	{
-		CLEAR_LED_GREEN;
-
-		switch (*flag_btn)
-			{
-				case BUTTON_3:
-					led_write(LED_GREEN, LED_6, HIGH);
-					break;
-				case BUTTON_2:
-					led_write(LED_GREEN, LED_4, HIGH);
-					break;
-				case BUTTON_1:
-					led_write(LED_GREEN, LED_2, HIGH);
-					break;
-				default:
-					;
-					break;
-			}
-
-		flag_proc = 1;
-		*flag_btn = 0;
-	}
-	return;
-}
-
 
 
 

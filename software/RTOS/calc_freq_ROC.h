@@ -14,6 +14,8 @@
 #define SAMPLING_FREQ 				16000
 #define FREQ_ADC_QUEUE_SIZE 		1000
 
+// Definition of Semaphores
+
 SemaphoreHandle_t freq_ADC_received_semaphore;
 QueueHandle_t Q_ADC_sample_values;
 
@@ -33,6 +35,7 @@ void freq_relay();
 
 void init_freq_analyser();
 
+// Task
 void calc_freq_ROC();
 
 /* Threshold Functions */

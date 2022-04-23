@@ -16,7 +16,7 @@
 uint is_verification_elapsed();
 void set_verification_flag(uint s);
 
-//set the global variable flag
+//set the timer_elapsed flag
 void verification_timer_callback(TimerHandle_t xTimer);
 
 void verification_timer_start();

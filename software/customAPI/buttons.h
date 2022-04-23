@@ -29,8 +29,6 @@
 void buttons_interrupt_function(void* context, alt_u32 id);
 	// Setup buttons irq
 alt_u32* buttons_init();
-	// Services the effect of the buttons
-void handle_buttons(void* p_flag_btn);
 
 #endif /* BUTTONS_H_ */
 

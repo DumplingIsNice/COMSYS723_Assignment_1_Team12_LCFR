@@ -46,7 +46,6 @@ uint handle_threshold_string_input(const char *string, char threshold_type)
 			}
 		} else {
 			// Raise some warning!!
-			// ENABLE Flash LED TASK?
 			printf("INVALID THRESHOLD INPUT!!!\n");
 		}
 	return status;
@@ -158,17 +157,6 @@ uint is_numbers_only(const char *string)
 			return 0;
 	}
 	return 1;
-}
-
-// Decodes keypad input
-void decode_KP()
-{
-	;
-}
-
-void print_to_LCD()
-{
-	;
 }
 
 
