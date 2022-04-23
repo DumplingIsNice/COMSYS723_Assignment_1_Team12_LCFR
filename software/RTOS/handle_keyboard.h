@@ -68,7 +68,4 @@ char check_command(char *string);
 // Checks if a string contains ONLY numerics
 uint is_numbers_only(const char *string);
 
-// Decodes keypad input
-void decode_KP();
-
 #endif /* RTOS_HANDLE_KEYBOARD_H_ */

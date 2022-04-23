@@ -7,17 +7,6 @@
 
 #include "global.h"
 
-//uint* get_load_data()
-//{
-//	// Needs sema? handle_switch and handle_load should be interleaved...
-//	return load_data;
-//}
-//
-//uint* get_switch_data()
-//{
-//	return switch_data;
-//}
-
 void set_global_threshold_freq(double threshold)
 {
 	if (xSemaphoreTake(freq_threshold_sem, portMAX_DELAY) == pdTRUE)
@@ -73,7 +62,6 @@ void toggle_global_maintainence()
 
 void set_global_sys_status(char status)
 {
-	// Needs semaphore
 	if (xSemaphoreTake(global_system_status_sem, portMAX_DELAY) == pdTRUE)
 	{
 		global_system_status = status;
@@ -85,7 +73,6 @@ void set_global_sys_status(char status)
 
 void set_global_sys_status_from_ISR(char status)
 {
-	// Needs semaphore
 	if (xSemaphoreTakeFromISR(global_system_status_sem, portMAX_DELAY) == pdTRUE)
 	{
 		global_system_status = status;
