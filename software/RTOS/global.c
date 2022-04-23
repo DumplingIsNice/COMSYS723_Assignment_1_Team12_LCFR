@@ -61,19 +61,12 @@ void toggle_global_maintainence()
 
 	switch (global_system_status)
 	{
-//	case STABLE:
-//		last_status = global_system_status;
-//		global_system_status = MAINTAIN;
-//		break;
-//	case UNSTABLE:
-//
-//		break;
 	case MAINTAIN:
-		global_system_status = last_status;
+		set_global_sys_status(last_status);
 		break;
 	default:
 		last_status = global_system_status;
-		global_system_status = MAINTAIN;
+		set_global_sys_status(MAINTAIN);
 	}
 
 }
