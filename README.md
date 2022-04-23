@@ -54,3 +54,35 @@ the lecturer (Prof Salcic).
 D) Confidential peer review.
 - Submit the confidential peer review to Canvas. The review must include a textual description of your reflection on the work of your partner with at **least 10 lines**.
 - Non-submission of the peer review results in a penalty of 10% of the total mark for the assignment.
+
+## Instructions
+
+Instructions for running this project on a DE2-115 board.
+
+**Folder Structure:**
+- documentation:
+  - Brief and system spec document
+  - A copy of this report
+- system
+  - System SRAM object (.sof)
+  - SOPC Builder file (.sopcinfo)
+- software
+  - calculation - depreciated folder
+  - customAPI - contains all functions for interacting with board & peripheral components
+  - freeRTOS - freeRTOS system files
+  - RTOS - contains all custom define tasks and global variable
+  - Main.c
+
+Program a de2-115 board with the .sof file and build an empty eclipse project with the .sopcinfo. Move all folders under software into the software folder of the project. Set the 1u timer as the timestamp timer in the BSP editor. Compile and run with a VGA display and p/s2 keyboard connection.
+
+**P/s2 Keyboard Input commands**
+All inputs are inputted and then registered via ENTER key. Ensure ENTER is pressed to clear previous input before inputting a new command. After entering one of the threshold setting commands (and have registered it) the next input will expect a decimal number and set the threshold value to that input. Any invalid input will not change the threshold value.
+
+**Available Inputs (case-sensitive)**
+- ENTER (key) - register command and clear carriage for new input.
+- freq - began setting frequency threshold. Next set of inputs determines the value.
+- rate - began setting the rate of change threshold. Next set of inputs determines the value.
+
+**Example:**
+freq + ENTER + 49.6 + ENTER - will set the frequency threshold value to 49.6Hz
+
