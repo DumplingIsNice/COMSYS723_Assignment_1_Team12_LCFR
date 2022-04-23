@@ -21,11 +21,15 @@ int init_OS_data_structs(void)
 	response_timer_end_gate_sem = xSemaphoreCreateBinary();
 	response_timer_start_gate_sem = xSemaphoreCreateBinary();
 
+	// Global Variable structs
+
 	Q_roc_calc_values = xQueueCreate(ROC_DATA_QUEUE_SIZE, sizeof(double));
 	roc_queue_sem = xSemaphoreCreateMutex();
+	roc_threshold_sem = xSemaphoreCreateMutex();
 
 	Q_freq_calc_values = xQueueCreate(FREQ_DATA_QUEUE_SIZE, sizeof(double));
 	freq_queue_sem = xSemaphoreCreateMutex();
+	freq_threshold_sem = xSemaphoreCreateMutex();
 
 	global_system_status_sem = xSemaphoreCreateMutex();
 

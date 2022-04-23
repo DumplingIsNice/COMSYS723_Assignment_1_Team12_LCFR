@@ -23,6 +23,9 @@ QueueHandle_t Q_roc_calc_values;
 SemaphoreHandle_t freq_queue_sem;
 QueueHandle_t Q_freq_calc_values;
 
+SemaphoreHandle_t freq_threshold_sem;
+SemaphoreHandle_t roc_threshold_sem;
+
 /* Calculation Functions */
 
 // ISR function to receive ACD sample value

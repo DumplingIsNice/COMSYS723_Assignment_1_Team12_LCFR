@@ -20,19 +20,39 @@
 
 void set_global_threshold_freq(double threshold)
 {
-	global_threshold_freq = (double)threshold;
+	if (xSemaphoreTake(freq_threshold_sem, portMAX_DELAY) == pdTRUE)
+	{
+		global_threshold_freq = (double)threshold;
+		xSemaphoreGive(freq_threshold_sem);
+	}
 }
 void set_global_threshold_roc(double threshold)
 {
-	global_threshold_roc = (double)threshold;
+	if (xSemaphoreTake(roc_threshold_sem, portMAX_DELAY) == pdTRUE)
+	{
+		global_threshold_roc = (double)threshold;
+		xSemaphoreGive(roc_threshold_sem);
+	}
 }
 double get_global_threshold_freq()
 {
-	return global_threshold_freq;
+	double freq;
+	if (xSemaphoreTake(freq_threshold_sem, portMAX_DELAY) == pdTRUE)
+	{
+		freq = global_threshold_freq;
+		xSemaphoreGive(freq_threshold_sem);
+	}
+	return freq;
 }
 double get_global_threshold_roc()
 {
-	return global_threshold_roc;
+	double roc;
+	if (xSemaphoreTake(roc_threshold_sem, portMAX_DELAY) == pdTRUE)
+	{
+		roc = global_threshold_roc;
+		xSemaphoreGive(roc_threshold_sem);
+	}
+	return roc;
 }
 
 void toggle_global_maintainence()
