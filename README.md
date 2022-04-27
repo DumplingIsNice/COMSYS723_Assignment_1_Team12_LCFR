@@ -75,7 +75,7 @@ Instructions for running this project on a DE2-115 board.
   - RTOS - contains all custom define tasks and global variable
   - Main.c
 
-Program a de2-115 board with the .sof file and build an empty eclipse project with the .sopcinfo. Move all folders under software into the software folder of the project. Set the 1u timer as the timestamp timer in the BSP editor. Compile and run with a VGA display and p/s2 keyboard connection.
+Program a de2-115 board with the .sof file and build an empty eclipse project with the .sopcinfo. Move all folders under software into the software folder of the project. Set the 1u timer as the timestamp timer in the BSP editor. Compile and run with a VGA display and p/s2 keyboard connection. If the numerical displays of frequency and rate of changes are unreadable, the rate at which the "snapshots" are updated may be changed in `service_VGA.h`.
 
 **P/s2 Keyboard Input commands**
 All inputs are inputted and then registered via ENTER key. Ensure ENTER is pressed to clear previous input before inputting a new command. After entering one of the threshold setting commands (and have registered it) the next input will expect a decimal number and set the threshold value to that input. Any invalid input will not change the threshold value.
