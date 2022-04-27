@@ -2,6 +2,7 @@
 Implementation of the application software of a low-cost frequency relay (LCFR), targeted for use in normal households.
 
 [miro board](https://miro.com/app/board/uXjVOEI94zc=/)
+[github](https://github.com/uoa-hlin784/COMSYS723_Assignment_1_Team12_LCFR)
 
 ## Deadlines
 
